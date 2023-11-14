@@ -1,0 +1,43 @@
+# Aliases
+#Pacman
+alias c="checkupdates"
+alias u="doas pacman -Syyu"
+alias i="doas pacman -S"
+alias r="doas pacman -R"
+alias q="doas pacman -Ss"
+
+# Timeshift backup
+alias ltime="doas timeshift --list"
+alias dels="doas timeshift --delete --snapshot"
+alias cres="doas timeshift --create --comments"
+
+alias diff="diff --color=always"
+alias v="vim"
+alias vim="nvim"
+alias rsync="rsync -rlpgto -h M --progress"
+#alias w="curl -H 'Accept-Language: es' wttr.in/bariloche"
+alias grep="grep --color=always"
+alias du="dust -r"
+alias df="df -h"
+alias duf="duf -hide-fs tmpfs,devtmpfs"
+alias cc="cd ~/.config"
+alias wget="wget --hsts-file='$XDG_CACHE_HOME/wget-hsts'"
+alias config='/usr/bin/git --git-dir=$HOME/.cfg/ --work-tree=$HOME'
+alias pic='/usr/bin/git --git-dir=$HOME/Pictures/.cfg/ --work-tree=$HOME/Pictures'
+alias wifi="nmtui"
+
+
+alias  l='eza -l  --icons' # long list
+alias ls='eza -1  --icons' # short list
+alias ll='eza -la --icons' # long list all
+alias ld='eza -lD --icons' # long list dirs
+alias un='sudo pacman -Rns' # uninstall package
+alias pl='pacman -Qs' # list installed package
+
+#switch between bash and zsh
+alias tobash="doas chsh $USER -s /bin/bash && echo 'Now log out.'"
+alias tozsh="doas chsh $USER -s /bin/zsh && echo 'Now log out.'"
+
+
+alias reboot="doas reboot"
+alias shutdown="doas shutdown"

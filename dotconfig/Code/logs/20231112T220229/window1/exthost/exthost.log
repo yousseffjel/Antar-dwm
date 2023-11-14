@@ -1,0 +1,10 @@
+2023-11-12 22:02:33.835 [info] Extension host with pid 214240 started
+2023-11-12 22:02:33.835 [info] Skipping acquiring lock for /home/yusuf/.config/Code/User/workspaceStorage/d544f9adc9374750a98903add71aa654.
+2023-11-12 22:02:34.365 [info] ExtensionService#_doActivateExtension vscode.git-base, startup: true, activationEvent: '*', root cause: vscode.git
+2023-11-12 22:02:34.418 [info] ExtensionService#_doActivateExtension vscode.git, startup: true, activationEvent: '*'
+2023-11-12 22:02:34.649 [info] ExtensionService#_doActivateExtension vscode.github, startup: true, activationEvent: '*'
+2023-11-12 22:02:34.835 [info] Eager extensions activated
+2023-11-12 22:02:34.926 [info] ExtensionService#_doActivateExtension vscode.debug-auto-launch, startup: false, activationEvent: 'onStartupFinished'
+2023-11-12 22:02:34.933 [info] ExtensionService#_doActivateExtension vscode.merge-conflict, startup: false, activationEvent: 'onStartupFinished'
+2023-11-12 22:02:34.987 [info] ExtensionService#_doActivateExtension Catppuccin.catppuccin-vsc, startup: false, activationEvent: 'onStartupFinished'
+2023-11-12 22:13:23.587 [info] ExtensionService#_doActivateExtension vscode.emmet, startup: false, activationEvent: 'onLanguage'

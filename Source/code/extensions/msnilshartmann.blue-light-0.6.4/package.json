@@ -1,0 +1,44 @@
+{
+	"name": "blue-light",
+	"displayName": "Blue Light Theme",
+	"description": "Light theme with blue colors",
+	"version": "0.6.4",
+	"publisher": "msnilshartmann",
+	"author": "Nils Hartmann",
+	"engines": {
+		"vscode": "^1.28.0"
+	},
+	"categories": [
+		"Themes"
+	],
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/nilshartmann/vscode-blue-light-theme"
+	},
+	"contributes": {
+		"themes": [
+			{
+				"label": "Blue Light Theme 2022",
+				"uiTheme": "vs",
+				"path": "./themes/blue-light-2022-color-theme.json"
+			},
+			{
+				"label": "Frosted-Glass",
+				"uiTheme": "vs",
+				"path": "./themes/blue-light-color-theme.json"
+			}
+		]
+	},
+	"icon": "blue-light-icon.png",
+	"license": "MIT",
+	"__metadata": {
+		"id": "3df7a5c3-e986-42b1-b9bd-11c19037a174",
+		"publisherId": "4d65f61a-f7c1-45e2-b943-b03dd22d5be1",
+		"publisherDisplayName": "Nils Hartmann",
+		"targetPlatform": "undefined",
+		"updated": false,
+		"isPreReleaseVersion": false,
+		"installedTimestamp": 1693371572697,
+		"preRelease": false
+	}
+}

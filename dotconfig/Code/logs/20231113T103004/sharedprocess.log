@@ -1,0 +1,16 @@
+2023-11-13 10:30:48.094 [info] Deleted uninstalled extension from disk ms-vscode.cpptools-extension-pack /home/yusuf/.vscode/extensions/ms-vscode.cpptools-extension-pack-1.3.0
+2023-11-13 10:30:50.473 [info] Deleted uninstalled extension from disk enkia.tokyo-night /home/yusuf/.vscode/extensions/enkia.tokyo-night-1.0.5
+2023-11-13 10:30:50.512 [info] Deleted uninstalled extension from disk catppuccin.catppuccin-vsc /home/yusuf/.vscode/extensions/catppuccin.catppuccin-vsc-3.6.0
+2023-11-13 10:30:50.517 [info] Deleted uninstalled extension from disk ms-vscode.cpptools-themes /home/yusuf/.vscode/extensions/ms-vscode.cpptools-themes-2.0.0
+2023-11-13 10:30:50.958 [info] Deleted uninstalled extension from disk mvllow.rose-pine /home/yusuf/.vscode/extensions/mvllow.rose-pine-2.9.0
+2023-11-13 10:30:53.732 [error] [uncaught exception in sharedProcess]: Error: ENOENT: no such file or directory, stat '/home/yusuf/.vscode/extensions/enkia.tokyo-night-1.0.5.-e9c8d7e.vsctmp': EntryNotFound (FileSystemError): Error: ENOENT: no such file or directory, stat '/home/yusuf/.vscode/extensions/enkia.tokyo-night-1.0.5.-e9c8d7e.vsctmp'
+    at r.create (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:51:30053)
+    at a (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:51:30167)
+    at s.fb (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:56:36175)
+    at s.stat (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:56:28621)
+    at async E.stat (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:56:15732)
+    at async K.tb (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:9535)
+2023-11-13 10:30:53.754 [info] Deleted uninstalled extension from disk jdinhlife.gruvbox /home/yusuf/.vscode/extensions/jdinhlife.gruvbox-1.17.0
+2023-11-13 10:30:57.600 [info] Deleted uninstalled extension from disk ms-vscode.cmake-tools /home/yusuf/.vscode/extensions/ms-vscode.cmake-tools-1.15.31
+2023-11-13 10:30:57.613 [info] Deleted uninstalled extension from disk ms-vscode.cpptools /home/yusuf/.vscode/extensions/ms-vscode.cpptools-1.17.5-linux-x64
+2023-11-13 10:31:01.333 [info] Deleted uninstalled extension from disk twxs.cmake /home/yusuf/.vscode/extensions/twxs.cmake-0.0.17

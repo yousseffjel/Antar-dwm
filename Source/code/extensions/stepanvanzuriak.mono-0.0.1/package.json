@@ -1,0 +1,44 @@
+{
+	"name": "mono",
+	"displayName": "mono",
+	"description": "Monochrome dark and white theme",
+	"version": "0.0.1",
+	"publisher": "StepanVanzuriak",
+	"repository": "https://github.com/stepanvanzuriak/mono",
+	"engines": {
+		"vscode": "^1.43.0"
+	},
+	"icon": "circle.png",
+	"categories": [
+		"Themes"
+	],
+	"keywords": [
+		"theme",
+		"color-theme",
+		"monochrome"
+	],
+	"contributes": {
+		"themes": [
+			{
+				"label": "Graphite-Mono",
+				"uiTheme": "vs-dark",
+				"path": "./themes/mono-color-theme.json"
+			},
+			{
+				"label": "mono white",
+				"uiTheme": "vs",
+				"path": "./themes/mono-white-color-theme.json"
+			}
+		]
+	},
+	"__metadata": {
+		"id": "4df463a2-e3b5-4cc3-af8a-244691e54fdf",
+		"publisherId": "8427be75-78e0-46bd-90b6-60d1cb476a01",
+		"publisherDisplayName": "Stepan Vanzuriak",
+		"targetPlatform": "undefined",
+		"updated": false,
+		"isPreReleaseVersion": false,
+		"installedTimestamp": 1692377279247,
+		"preRelease": false
+	}
+}
