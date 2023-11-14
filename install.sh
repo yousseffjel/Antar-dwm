@@ -90,7 +90,7 @@ fi
 
 ### link Config Files ###
 printf " linking config files...\n"
-sudo mkdir $HOME/.config
+#sudo mkdir $HOME/.config
 ln -sf $HOME/Antar-dwm/dotconfig/rofi $HOME/.config/
 ln -sf $HOME/Antar-dwm/dotconfig/neofetch $HOME/.config/
 ln -sf $HOME/Antar-dwm/dotconfig/sxhkd $HOME/.config/

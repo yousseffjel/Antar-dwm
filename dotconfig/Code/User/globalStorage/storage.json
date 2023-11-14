@@ -2,9 +2,12 @@
     "userDataProfilesMigration": true,
     "profileAssociations": {
         "workspaces": {
-            "file:///home/yusuf/src/Antar-hypr/Scripts": "__default__profile__"
+            "file:///home/yusuf/src/Antar-hypr/Scripts": "__default__profile__",
+            "file:///home/yusuf/src/suckless-utils/slstatus": "__default__profile__"
         },
-        "emptyWindows": {}
+        "emptyWindows": {
+            "1699955377213": "__default__profile__"
+        }
     },
     "profileAssociationsMigration": true,
     "telemetry.sqmId": "",
@@ -13,15 +16,19 @@
         "workspaces": [],
         "folders": [
             {
-                "folderUri": "file:///home/yusuf/src/Antar-hypr/Scripts"
+                "folderUri": "file:///home/yusuf/src/suckless-utils/slstatus"
             }
         ],
-        "emptyWindows": []
+        "emptyWindows": [
+            {
+                "backupFolder": "1699955377213"
+            }
+        ]
     },
     "windowsState": {
         "lastActiveWindow": {
-            "folder": "file:///home/yusuf/src/Antar-hypr/Scripts",
-            "backupPath": "/home/yusuf/.config/Code/Backups/278d508b662dc9cf2b3a6e913c02e629",
+            "folder": "file:///home/yusuf/src/suckless-utils/slstatus",
+            "backupPath": "/home/yusuf/.config/Code/Backups/14d8dcf399b68d9ac0f029d584edcb74",
             "uiState": {
                 "mode": 1,
                 "x": -2702,
@@ -80,12 +87,12 @@
                                     "id": "openRecentFolder",
                                     "uri": {
                                         "$mid": 1,
-                                        "external": "file:///home/yusuf/src/Antar-hypr/Scripts",
-                                        "path": "/home/yusuf/src/Antar-hypr/Scripts",
+                                        "external": "file:///home/yusuf/src/suckless-utils/slstatus",
+                                        "path": "/home/yusuf/src/suckless-utils/slstatus",
                                         "scheme": "file"
                                     },
                                     "enabled": true,
-                                    "label": "~/src/Antar-hypr/Scripts"
+                                    "label": "~/src/suckless-utils/slstatus"
                                 },
                                 {
                                     "id": "vscode.menubar.separator"
@@ -1677,19 +1684,20 @@
         }
     },
     "theme": "vs-dark",
-    "themeBackground": "#1f1f1f",
+    "themeBackground": "#1e1e2e",
     "windowSplash": {
         "zoomLevel": 0,
         "baseTheme": "vs-dark",
         "colorInfo": {
-            "foreground": "#cccccc",
-            "background": "#1f1f1f",
-            "editorBackground": "#1f1f1f",
-            "titleBarBackground": "#181818",
-            "activityBarBackground": "#181818",
-            "sideBarBackground": "#181818",
-            "statusBarBackground": "#181818",
-            "statusBarNoFolderBackground": "#1f1f1f"
+            "foreground": "#cdd6f4",
+            "background": "#1e1e2e",
+            "editorBackground": "#1e1e2e",
+            "titleBarBackground": "#181825",
+            "activityBarBackground": "#181825",
+            "sideBarBackground": "#181825",
+            "statusBarBackground": "#181825",
+            "statusBarNoFolderBackground": "#181825",
+            "windowBorder": "rgba(0, 0, 0, 0)"
         },
         "layoutInfo": {
             "sideBarSide": "left",

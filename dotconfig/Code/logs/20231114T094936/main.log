@@ -1,0 +1,9 @@
+2023-11-14 09:49:36.725 [info] update#setState idle
+2023-11-14 09:49:37.022 [error] Error: Unable to read file '/home/yusuf/.vscode/argv.json' (Error: Unable to resolve nonexistent file '/home/yusuf/.vscode/argv.json')
+    at c.F (/opt/visual-studio-code/resources/app/out/vs/code/electron-main/main.js:59:18255)
+    at c.D (/opt/visual-studio-code/resources/app/out/vs/code/electron-main/main.js:59:18050)
+    at async c.C (/opt/visual-studio-code/resources/app/out/vs/code/electron-main/main.js:59:17362)
+    at async ut.Y (/opt/visual-studio-code/resources/app/out/vs/code/electron-main/main.js:106:68241)
+2023-11-14 09:50:06.729 [info] update#setState checking for updates
+2023-11-14 09:50:06.812 [info] update#setState idle
+2023-11-14 09:50:34.440 [info] Extension host with pid 21186 exited with code: 0, signal: unknown.

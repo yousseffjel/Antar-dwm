@@ -1,0 +1,28 @@
+2023-11-14 09:49:39.005 [warning] Via 'product.json#extensionEnabledApiProposals' extension 'ms-dotnettools.dotnet-interactive-vscode' wants API proposal 'languageConfigurationAutoClosingPairs' but that proposal DOES NOT EXIST. Likely, the proposal has been finalized (check 'vscode.d.ts') or was abandoned.
+2023-11-14 09:49:47.245 [info] [perf] Render performance baseline is 244ms
+2023-11-14 09:50:34.911 [warning] Via 'product.json#extensionEnabledApiProposals' extension 'ms-dotnettools.dotnet-interactive-vscode' wants API proposal 'languageConfigurationAutoClosingPairs' but that proposal DOES NOT EXIST. Likely, the proposal has been finalized (check 'vscode.d.ts') or was abandoned.
+2023-11-14 09:50:38.030 [info] [perf] Render performance baseline is 44ms
+2023-11-14 09:52:40.620 [error] Error: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.b8aa655f-5502-480e-929c-3560df870b81',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.96a3591b-8fd3-4934-9ef9-62cca36bcb37',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.93497c75-20b1-41c2-81f1-fd4a275bfe09',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.e7565d72-c312-43ed-9c66-fa5971ee9e5b'
+    at /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78806
+    at Array.reduce (<anonymous>)
+    at E (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78792)
+    at K.M (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:70467)
+    at async K.J (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:68153)
+    at async /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64821
+    at async Promise.allSettled (index 0)
+    at async K.I (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64768)
+    at async K.installGalleryExtensions (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:63217)
+    at async K.installFromGallery (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:62538)
+2023-11-14 09:52:40.658 [error] EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.b8aa655f-5502-480e-929c-3560df870b81',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.96a3591b-8fd3-4934-9ef9-62cca36bcb37',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.93497c75-20b1-41c2-81f1-fd4a275bfe09',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.e7565d72-c312-43ed-9c66-fa5971ee9e5b': Error: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.b8aa655f-5502-480e-929c-3560df870b81',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.96a3591b-8fd3-4934-9ef9-62cca36bcb37',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.93497c75-20b1-41c2-81f1-fd4a275bfe09',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.e7565d72-c312-43ed-9c66-fa5971ee9e5b'
+    at /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78806
+    at Array.reduce (<anonymous>)
+    at E (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78792)
+    at K.M (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:70467)
+    at async K.J (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:68153)
+    at async /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64821
+    at async Promise.allSettled (index 0)
+    at async K.I (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64768)
+    at async K.installGalleryExtensions (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:63217)
+    at async K.installFromGallery (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:62538)
+2023-11-14 09:54:52.705 [warning] [File Watcher (parcel)] Watcher shutdown because watched path got deleted (path: /home/yusuf/src/suckless-utils/slstatus)
+2023-11-14 09:55:24.096 [warning] [File Watcher (node.js)] Watcher shutdown because watched path got deleted

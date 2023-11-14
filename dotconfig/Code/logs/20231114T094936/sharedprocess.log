@@ -1,0 +1,198 @@
+2023-11-14 09:49:46.397 [info] Marked extension as uninstalled catppuccin.catppuccin-vsc-3.6.0
+2023-11-14 09:49:46.398 [info] Marked extension as uninstalled enkia.tokyo-night-1.0.5
+2023-11-14 09:49:46.399 [info] Marked extension as uninstalled jdinhlife.gruvbox-1.17.0
+2023-11-14 09:49:46.400 [info] Marked extension as uninstalled mvllow.rose-pine-2.9.0
+2023-11-14 09:49:47.165 [error] Error: Unable to write file '/home/yusuf/.vscode/extensions/.obsolete' (NoPermissions (FileSystemError): Error: EACCES: permission denied, open '/home/yusuf/.vscode/extensions/.obsolete')
+    at E.writeFile (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:56:16811)
+    at async Object.factory (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:14698)
+2023-11-14 09:50:45.064 [info] Getting Manifest... ms-vscode.cpptools-extension-pack
+2023-11-14 09:50:45.077 [info] Installing extension: ms-vscode.cpptools-extension-pack
+2023-11-14 09:50:45.579 [info] Getting Manifest... ms-vscode.cpptools
+2023-11-14 09:50:45.614 [info] Getting Manifest... ms-vscode.cmake-tools
+2023-11-14 09:50:45.796 [info] Getting Manifest... twxs.cmake
+2023-11-14 09:50:45.842 [info] Getting Manifest... ms-vscode.cpptools-themes
+2023-11-14 09:50:46.031 [info] Installing extension: ms-vscode.cpptools ms-vscode.cpptools-extension-pack
+2023-11-14 09:50:46.032 [info] Installing extension: ms-vscode.cmake-tools ms-vscode.cpptools-extension-pack
+2023-11-14 09:50:46.032 [info] Installing extension: twxs.cmake ms-vscode.cpptools-extension-pack
+2023-11-14 09:50:46.033 [info] Installing extension: ms-vscode.cpptools-themes ms-vscode.cpptools-extension-pack
+2023-11-14 09:50:47.313 [warning] Extension signature verification failed with error 'UnknownError': ms-vscode.cpptools-themes
+2023-11-14 09:50:47.324 [error] Error while installing the extension: ms-vscode.cpptools-themes
+2023-11-14 09:50:47.330 [error] [uncaught exception in sharedProcess]: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.cb486032-c3d0-429d-a1b7-9f81637b6915': Extract: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.cb486032-c3d0-429d-a1b7-9f81637b6915'
+    at G.extractUserExtension (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:12231)
+    at async ee.u (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:18380)
+    at async ee.x (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:20014)
+    at async ee.h (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:17947)
+2023-11-14 09:50:47.508 [warning] Extension signature verification failed with error 'UnknownError': ms-vscode.cmake-tools
+2023-11-14 09:50:47.516 [error] Error while installing the extension: ms-vscode.cmake-tools
+2023-11-14 09:50:47.517 [error] [uncaught exception in sharedProcess]: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.3e94d1f3-19df-4852-93a6-db7ea97fb20c': Extract: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.3e94d1f3-19df-4852-93a6-db7ea97fb20c'
+    at G.extractUserExtension (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:12231)
+    at async ee.u (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:18380)
+    at async ee.x (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:20014)
+    at async ee.h (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:17947)
+2023-11-14 09:50:49.476 [warning] Extension signature verification failed with error 'UnknownError': twxs.cmake
+2023-11-14 09:50:49.483 [error] Error while installing the extension: twxs.cmake
+2023-11-14 09:50:49.487 [error] [uncaught exception in sharedProcess]: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.44a39416-864b-4c77-9a46-771c91906568': Extract: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.44a39416-864b-4c77-9a46-771c91906568'
+    at G.extractUserExtension (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:12231)
+    at async ee.u (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:18380)
+    at async ee.x (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:20014)
+    at async ee.h (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:17947)
+2023-11-14 09:50:56.084 [warning] Extension signature verification failed with error 'UnknownError': ms-vscode.cpptools
+2023-11-14 09:50:56.091 [error] Error while installing the extension: ms-vscode.cpptools
+2023-11-14 09:50:56.094 [error] Failed to install extension. ms-vscode.cpptools-extension-pack
+2023-11-14 09:50:56.094 [error] Error: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.7428c6ac-b7ac-47e3-88c7-a1868d2158d4',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.3e94d1f3-19df-4852-93a6-db7ea97fb20c',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.44a39416-864b-4c77-9a46-771c91906568',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.cb486032-c3d0-429d-a1b7-9f81637b6915'
+    at /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78806
+    at Array.reduce (<anonymous>)
+    at E (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78792)
+    at K.M (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:70467)
+    at async K.J (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:68153)
+    at async /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64821
+    at async Promise.allSettled (index 0)
+    at async K.I (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64768)
+    at async K.installGalleryExtensions (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:63217)
+2023-11-14 09:50:56.095 [error] Failed to install extension. ms-vscode.cpptools
+2023-11-14 09:50:56.095 [error] Error: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.7428c6ac-b7ac-47e3-88c7-a1868d2158d4',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.3e94d1f3-19df-4852-93a6-db7ea97fb20c',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.44a39416-864b-4c77-9a46-771c91906568',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.cb486032-c3d0-429d-a1b7-9f81637b6915'
+    at /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78806
+    at Array.reduce (<anonymous>)
+    at E (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78792)
+    at K.M (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:70467)
+    at async K.J (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:68153)
+    at async /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64821
+    at async Promise.allSettled (index 0)
+    at async K.I (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64768)
+    at async K.installGalleryExtensions (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:63217)
+2023-11-14 09:50:56.095 [error] Failed to install extension. ms-vscode.cmake-tools
+2023-11-14 09:50:56.095 [error] Error: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.7428c6ac-b7ac-47e3-88c7-a1868d2158d4',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.3e94d1f3-19df-4852-93a6-db7ea97fb20c',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.44a39416-864b-4c77-9a46-771c91906568',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.cb486032-c3d0-429d-a1b7-9f81637b6915'
+    at /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78806
+    at Array.reduce (<anonymous>)
+    at E (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78792)
+    at K.M (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:70467)
+    at async K.J (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:68153)
+    at async /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64821
+    at async Promise.allSettled (index 0)
+    at async K.I (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64768)
+    at async K.installGalleryExtensions (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:63217)
+2023-11-14 09:50:56.096 [error] Failed to install extension. twxs.cmake
+2023-11-14 09:50:56.096 [error] Error: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.7428c6ac-b7ac-47e3-88c7-a1868d2158d4',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.3e94d1f3-19df-4852-93a6-db7ea97fb20c',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.44a39416-864b-4c77-9a46-771c91906568',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.cb486032-c3d0-429d-a1b7-9f81637b6915'
+    at /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78806
+    at Array.reduce (<anonymous>)
+    at E (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78792)
+    at K.M (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:70467)
+    at async K.J (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:68153)
+    at async /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64821
+    at async Promise.allSettled (index 0)
+    at async K.I (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64768)
+    at async K.installGalleryExtensions (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:63217)
+2023-11-14 09:50:56.096 [error] Failed to install extension. ms-vscode.cpptools-themes
+2023-11-14 09:50:56.097 [error] Error: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.7428c6ac-b7ac-47e3-88c7-a1868d2158d4',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.3e94d1f3-19df-4852-93a6-db7ea97fb20c',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.44a39416-864b-4c77-9a46-771c91906568',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.cb486032-c3d0-429d-a1b7-9f81637b6915'
+    at /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78806
+    at Array.reduce (<anonymous>)
+    at E (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78792)
+    at K.M (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:70467)
+    at async K.J (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:68153)
+    at async /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64821
+    at async Promise.allSettled (index 0)
+    at async K.I (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64768)
+    at async K.installGalleryExtensions (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:63217)
+2023-11-14 09:50:56.098 [error] [uncaught exception in sharedProcess]: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.7428c6ac-b7ac-47e3-88c7-a1868d2158d4': Extract: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.7428c6ac-b7ac-47e3-88c7-a1868d2158d4'
+    at G.extractUserExtension (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:12231)
+    at async ee.u (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:18380)
+    at async ee.x (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:20014)
+    at async ee.h (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:17947)
+2023-11-14 09:52:26.739 [info] Getting Manifest... ms-vscode.cpptools-extension-pack
+2023-11-14 09:52:26.775 [info] Installing extension: ms-vscode.cpptools-extension-pack
+2023-11-14 09:52:27.521 [info] Getting Manifest... ms-vscode.cpptools
+2023-11-14 09:52:27.538 [info] Getting Manifest... ms-vscode.cmake-tools
+2023-11-14 09:52:27.691 [info] Getting Manifest... twxs.cmake
+2023-11-14 09:52:27.696 [info] Getting Manifest... ms-vscode.cpptools-themes
+2023-11-14 09:52:27.871 [info] Installing extension: ms-vscode.cpptools ms-vscode.cpptools-extension-pack
+2023-11-14 09:52:27.871 [info] Installing extension: ms-vscode.cmake-tools ms-vscode.cpptools-extension-pack
+2023-11-14 09:52:27.871 [info] Installing extension: twxs.cmake ms-vscode.cpptools-extension-pack
+2023-11-14 09:52:27.872 [info] Installing extension: ms-vscode.cpptools-themes ms-vscode.cpptools-extension-pack
+2023-11-14 09:52:28.617 [warning] Extension signature verification failed with error 'UnknownError': ms-vscode.cmake-tools
+2023-11-14 09:52:28.623 [error] Error while installing the extension: ms-vscode.cmake-tools
+2023-11-14 09:52:28.624 [error] [uncaught exception in sharedProcess]: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.96a3591b-8fd3-4934-9ef9-62cca36bcb37': Extract: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.96a3591b-8fd3-4934-9ef9-62cca36bcb37'
+    at G.extractUserExtension (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:12231)
+    at async ee.u (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:18380)
+    at async ee.x (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:20014)
+    at async ee.h (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:17947)
+2023-11-14 09:52:28.639 [warning] Extension signature verification failed with error 'UnknownError': ms-vscode.cpptools-themes
+2023-11-14 09:52:28.652 [error] Error while installing the extension: ms-vscode.cpptools-themes
+2023-11-14 09:52:28.652 [error] [uncaught exception in sharedProcess]: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.e7565d72-c312-43ed-9c66-fa5971ee9e5b': Extract: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.e7565d72-c312-43ed-9c66-fa5971ee9e5b'
+    at G.extractUserExtension (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:12231)
+    at async ee.u (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:18380)
+    at async ee.x (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:20014)
+    at async ee.h (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:17947)
+2023-11-14 09:52:28.655 [warning] Extension signature verification failed with error 'UnknownError': twxs.cmake
+2023-11-14 09:52:28.660 [error] Error while installing the extension: twxs.cmake
+2023-11-14 09:52:28.661 [error] [uncaught exception in sharedProcess]: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.93497c75-20b1-41c2-81f1-fd4a275bfe09': Extract: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.93497c75-20b1-41c2-81f1-fd4a275bfe09'
+    at G.extractUserExtension (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:12231)
+    at async ee.u (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:18380)
+    at async ee.x (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:20014)
+    at async ee.h (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:17947)
+2023-11-14 09:52:40.560 [warning] Extension signature verification failed with error 'UnknownError': ms-vscode.cpptools
+2023-11-14 09:52:40.568 [error] Error while installing the extension: ms-vscode.cpptools
+2023-11-14 09:52:40.571 [error] Failed to install extension. ms-vscode.cpptools-extension-pack
+2023-11-14 09:52:40.571 [error] Error: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.b8aa655f-5502-480e-929c-3560df870b81',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.96a3591b-8fd3-4934-9ef9-62cca36bcb37',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.93497c75-20b1-41c2-81f1-fd4a275bfe09',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.e7565d72-c312-43ed-9c66-fa5971ee9e5b'
+    at /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78806
+    at Array.reduce (<anonymous>)
+    at E (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78792)
+    at K.M (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:70467)
+    at async K.J (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:68153)
+    at async /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64821
+    at async Promise.allSettled (index 0)
+    at async K.I (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64768)
+    at async K.installGalleryExtensions (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:63217)
+    at async K.installFromGallery (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:62538)
+2023-11-14 09:52:40.572 [error] Failed to install extension. ms-vscode.cpptools
+2023-11-14 09:52:40.572 [error] Error: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.b8aa655f-5502-480e-929c-3560df870b81',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.96a3591b-8fd3-4934-9ef9-62cca36bcb37',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.93497c75-20b1-41c2-81f1-fd4a275bfe09',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.e7565d72-c312-43ed-9c66-fa5971ee9e5b'
+    at /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78806
+    at Array.reduce (<anonymous>)
+    at E (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78792)
+    at K.M (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:70467)
+    at async K.J (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:68153)
+    at async /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64821
+    at async Promise.allSettled (index 0)
+    at async K.I (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64768)
+    at async K.installGalleryExtensions (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:63217)
+    at async K.installFromGallery (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:62538)
+2023-11-14 09:52:40.572 [error] Failed to install extension. ms-vscode.cmake-tools
+2023-11-14 09:52:40.573 [error] Error: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.b8aa655f-5502-480e-929c-3560df870b81',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.96a3591b-8fd3-4934-9ef9-62cca36bcb37',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.93497c75-20b1-41c2-81f1-fd4a275bfe09',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.e7565d72-c312-43ed-9c66-fa5971ee9e5b'
+    at /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78806
+    at Array.reduce (<anonymous>)
+    at E (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78792)
+    at K.M (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:70467)
+    at async K.J (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:68153)
+    at async /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64821
+    at async Promise.allSettled (index 0)
+    at async K.I (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64768)
+    at async K.installGalleryExtensions (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:63217)
+    at async K.installFromGallery (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:62538)
+2023-11-14 09:52:40.573 [error] Failed to install extension. twxs.cmake
+2023-11-14 09:52:40.573 [error] Error: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.b8aa655f-5502-480e-929c-3560df870b81',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.96a3591b-8fd3-4934-9ef9-62cca36bcb37',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.93497c75-20b1-41c2-81f1-fd4a275bfe09',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.e7565d72-c312-43ed-9c66-fa5971ee9e5b'
+    at /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78806
+    at Array.reduce (<anonymous>)
+    at E (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78792)
+    at K.M (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:70467)
+    at async K.J (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:68153)
+    at async /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64821
+    at async Promise.allSettled (index 0)
+    at async K.I (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64768)
+    at async K.installGalleryExtensions (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:63217)
+    at async K.installFromGallery (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:62538)
+2023-11-14 09:52:40.573 [error] Failed to install extension. ms-vscode.cpptools-themes
+2023-11-14 09:52:40.574 [error] Error: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.b8aa655f-5502-480e-929c-3560df870b81',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.96a3591b-8fd3-4934-9ef9-62cca36bcb37',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.93497c75-20b1-41c2-81f1-fd4a275bfe09',EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.e7565d72-c312-43ed-9c66-fa5971ee9e5b'
+    at /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78806
+    at Array.reduce (<anonymous>)
+    at E (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:78792)
+    at K.M (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:70467)
+    at async K.J (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:68153)
+    at async /opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64821
+    at async Promise.allSettled (index 0)
+    at async K.I (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:64768)
+    at async K.installGalleryExtensions (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:63217)
+    at async K.installFromGallery (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:99:62538)
+2023-11-14 09:52:40.574 [error] [uncaught exception in sharedProcess]: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.b8aa655f-5502-480e-929c-3560df870b81': Extract: EACCES: permission denied, mkdir '/home/yusuf/.vscode/extensions/.b8aa655f-5502-480e-929c-3560df870b81'
+    at G.extractUserExtension (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:12231)
+    at async ee.u (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:18380)
+    at async ee.x (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:20014)
+    at async ee.h (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:17947)
