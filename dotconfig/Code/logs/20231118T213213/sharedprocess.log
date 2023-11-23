@@ -1,0 +1,7 @@
+2023-11-18 21:32:17.180 [info] Marked extension as uninstalled catppuccin.catppuccin-vsc-3.6.0
+2023-11-18 21:32:17.183 [info] Marked extension as uninstalled enkia.tokyo-night-1.0.5
+2023-11-18 21:32:17.183 [info] Marked extension as uninstalled jdinhlife.gruvbox-1.17.0
+2023-11-18 21:32:17.184 [info] Marked extension as uninstalled mvllow.rose-pine-2.9.0
+2023-11-18 21:32:17.796 [error] Error: Unable to write file '/home/yusuf/.vscode/extensions/.obsolete' (NoPermissions (FileSystemError): Error: EACCES: permission denied, open '/home/yusuf/.vscode/extensions/.obsolete')
+    at E.writeFile (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:56:16811)
+    at async Object.factory (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:109:14698)

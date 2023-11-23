@@ -2,13 +2,9 @@
 super + shift + Escape
 	pkill -USR1 -x sxhkd; notify-send 'sxhkd' 'Reloaded config'
 
-# Run rofi 
-super + d
-	~/.config/rofi/launchers/launcher.sh	
-
 # Run apps
 super + b
-	brave
+	thorium-browser
 
 super + e
 	thunar
@@ -22,15 +18,33 @@ bitwarden-desktop
 super + alt + b
 	blueman-manager
 
+super + shift + v
+  copyq read 0 1 2 3 4 5 6 7 8 9 10 | uniq | dmenu | xsel -ip  && copyq paste
 
 
 # Power key
 super + shift + x
-	~/.config/rofi/powermenu/powermenu.sh
+	~/bin/logout.sh
 
 super + shift + l 
 	 betterlockscreen -l
 
+# key for mount & umount 
+super + shift + m
+  ~/bin/mountmenu.sh
+
+super + shift + u
+  ~/bin/umountmenu.sh
+
+# ScreenShot
+super + p
+	flameshot full -p $HOME/Pictures/Screenshots/
+
+super + shift + p
+	flameshot gui -p $HOME/Pictures/Screenshots/
+
+super + alt + p
+	flameshot gui --clipboard
 
 
 

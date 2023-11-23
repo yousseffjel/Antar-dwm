@@ -3,38 +3,41 @@
     "profileAssociations": {
         "workspaces": {
             "file:///home/yusuf/src/Antar-hypr/Scripts": "__default__profile__",
-            "file:///home/yusuf/src/suckless-utils/slstatus": "__default__profile__"
+            "file:///home/yusuf/src/suckless-utils/slstatus": "__default__profile__",
+            "file:///home/yusuf/Antar-dwm": "__default__profile__",
+            "file:///home/yusuf/bin": "__default__profile__",
+            "file:///home/yusuf/Local%20Sites/iptvstore": "__default__profile__",
+            "file:///home/yusuf/.config/xmonad/xmonad-example-configs": "__default__profile__",
+            "file:///home/yusuf/.config/Code/Workspaces/1700343145594/workspace.json": "__default__profile__"
         },
-        "emptyWindows": {
-            "1699955377213": "__default__profile__"
-        }
+        "emptyWindows": {}
     },
     "profileAssociationsMigration": true,
     "telemetry.sqmId": "",
     "telemetry.machineId": "65f15d24a84e2efa6f61f11deccd60ce6538008743555e093488d2390aed6f31",
     "backupWorkspaces": {
-        "workspaces": [],
-        "folders": [
+        "workspaces": [
             {
-                "folderUri": "file:///home/yusuf/src/suckless-utils/slstatus"
+                "id": "d0d899516e56d54105a70d025129b1b3",
+                "configURIPath": "file:///home/yusuf/.config/Code/Workspaces/1700343145594/workspace.json"
             }
         ],
-        "emptyWindows": [
-            {
-                "backupFolder": "1699955377213"
-            }
-        ]
+        "folders": [],
+        "emptyWindows": []
     },
     "windowsState": {
         "lastActiveWindow": {
-            "folder": "file:///home/yusuf/src/suckless-utils/slstatus",
-            "backupPath": "/home/yusuf/.config/Code/Backups/14d8dcf399b68d9ac0f029d584edcb74",
+            "workspaceIdentifier": {
+                "id": "d0d899516e56d54105a70d025129b1b3",
+                "configURIPath": "file:///home/yusuf/.config/Code/Workspaces/1700343145594/workspace.json"
+            },
+            "backupPath": "/home/yusuf/.config/Code/Backups/d0d899516e56d54105a70d025129b1b3",
             "uiState": {
                 "mode": 1,
-                "x": -2702,
-                "y": 25,
-                "width": 1348,
-                "height": 735
+                "x": -3263,
+                "y": 28,
+                "width": 1628,
+                "height": 890
             }
         },
         "openedWindows": []
@@ -87,15 +90,70 @@
                                     "id": "openRecentFolder",
                                     "uri": {
                                         "$mid": 1,
-                                        "external": "file:///home/yusuf/src/suckless-utils/slstatus",
-                                        "path": "/home/yusuf/src/suckless-utils/slstatus",
+                                        "external": "file:///home/yusuf/.config/xmonad/xmonad-example-configs",
+                                        "path": "/home/yusuf/.config/xmonad/xmonad-example-configs",
                                         "scheme": "file"
                                     },
                                     "enabled": true,
-                                    "label": "~/src/suckless-utils/slstatus"
+                                    "label": "~/.config/xmonad/xmonad-example-configs"
+                                },
+                                {
+                                    "id": "openRecentFolder",
+                                    "uri": {
+                                        "$mid": 1,
+                                        "external": "file:///home/yusuf/Local%20Sites/iptvstore",
+                                        "path": "/home/yusuf/Local Sites/iptvstore",
+                                        "scheme": "file"
+                                    },
+                                    "enabled": true,
+                                    "label": "~/Local Sites/iptvstore"
+                                },
+                                {
+                                    "id": "openRecentFolder",
+                                    "uri": {
+                                        "$mid": 1,
+                                        "external": "file:///home/yusuf/bin",
+                                        "path": "/home/yusuf/bin",
+                                        "scheme": "file"
+                                    },
+                                    "enabled": true,
+                                    "label": "~/bin"
+                                },
+                                {
+                                    "id": "openRecentFolder",
+                                    "uri": {
+                                        "$mid": 1,
+                                        "external": "file:///home/yusuf/Antar-dwm",
+                                        "path": "/home/yusuf/Antar-dwm",
+                                        "scheme": "file"
+                                    },
+                                    "enabled": true,
+                                    "label": "~/Antar-dwm"
                                 },
                                 {
                                     "id": "vscode.menubar.separator"
+                                },
+                                {
+                                    "id": "openRecentFile",
+                                    "uri": {
+                                        "$mid": 1,
+                                        "external": "file:///home/yusuf/WordPress/Pro%20Plugins/masterstudy.4.8.23-package/MasterStudy%20Theme%20Documentation.url",
+                                        "path": "/home/yusuf/WordPress/Pro Plugins/masterstudy.4.8.23-package/MasterStudy Theme Documentation.url",
+                                        "scheme": "file"
+                                    },
+                                    "enabled": true,
+                                    "label": "~/WordPress/Pro Plugins/masterstudy.4.8.23-package/MasterStudy Theme Documentation.url"
+                                },
+                                {
+                                    "id": "openRecentFile",
+                                    "uri": {
+                                        "$mid": 1,
+                                        "external": "file:///home/yusuf/bin/cpu.sh",
+                                        "path": "/home/yusuf/bin/cpu.sh",
+                                        "scheme": "file"
+                                    },
+                                    "enabled": true,
+                                    "label": "~/bin/cpu.sh"
                                 },
                                 {
                                     "id": "openRecentFile",
@@ -175,6 +233,13 @@
                         "label": "Share",
                         "submenu": {
                             "items": [
+                                {
+                                    "id": "github.copyVscodeDevLinkFile",
+                                    "label": "Copy vscode.dev Link"
+                                },
+                                {
+                                    "id": "vscode.menubar.separator"
+                                },
                                 {
                                     "id": "workbench.profiles.actions.exportProfile",
                                     "label": "Export Profile (Default)..."
@@ -311,7 +376,7 @@
                     },
                     {
                         "id": "workbench.action.closeFolder",
-                        "label": "Close &&Folder"
+                        "label": "Close &&Workspace"
                     },
                     {
                         "id": "workbench.action.closeWindow",
@@ -506,8 +571,7 @@
                                 },
                                 {
                                     "id": "workbench.action.toggleSidebarVisibility",
-                                    "label": "&&Primary Side Bar",
-                                    "checked": true
+                                    "label": "&&Primary Side Bar"
                                 },
                                 {
                                     "id": "workbench.action.toggleAuxiliaryBar",
@@ -785,7 +849,8 @@
                 "items": [
                     {
                         "id": "workbench.action.navigateBack",
-                        "label": "&&Back"
+                        "label": "&&Back",
+                        "enabled": false
                     },
                     {
                         "id": "workbench.action.navigateForward",
@@ -1686,7 +1751,7 @@
     "theme": "vs-dark",
     "themeBackground": "#1e1e2e",
     "windowSplash": {
-        "zoomLevel": 0,
+        "zoomLevel": 1,
         "baseTheme": "vs-dark",
         "colorInfo": {
             "foreground": "#cdd6f4",
@@ -1704,7 +1769,7 @@
             "editorPartMinWidth": 220,
             "titleBarHeight": 0,
             "activityBarWidth": 48,
-            "sideBarWidth": 170,
+            "sideBarWidth": 0,
             "statusBarHeight": 0,
             "windowBorder": false
         }

@@ -1,0 +1,4 @@
+2023-11-18 21:32:14.495 [warning] Via 'product.json#extensionEnabledApiProposals' extension 'ms-dotnettools.dotnet-interactive-vscode' wants API proposal 'languageConfigurationAutoClosingPairs' but that proposal DOES NOT EXIST. Likely, the proposal has been finalized (check 'vscode.d.ts') or was abandoned.
+2023-11-18 21:32:18.048 [info] [perf] Render performance baseline is 101ms
+2023-11-18 21:32:33.671 [error] No registered selector for ID: ms-vscode.npm-command: Error: No registered selector for ID: ms-vscode.npm-command
+    at vscode-file://vscode-app/opt/visual-studio-code/resources/app/out/vs/workbench/workbench.desktop.main.js:1544:26325

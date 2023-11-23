@@ -1,2 +1,3 @@
-2023/11/12-22:02:22.332 1583 Creating DB /home/yusuf/.config/Code/Session Storage since it was missing.
-2023/11/12-22:02:22.338 1583 Reusing MANIFEST /home/yusuf/.config/Code/Session Storage/MANIFEST-000001
+2023/11/21-21:33:06.403 1aeff Reusing MANIFEST /home/yusuf/.config/Code/Session Storage/MANIFEST-000001
+2023/11/21-21:33:06.403 1aeff Recovering log #3
+2023/11/21-21:33:06.404 1aeff Reusing old log /home/yusuf/.config/Code/Session Storage/000003.log 

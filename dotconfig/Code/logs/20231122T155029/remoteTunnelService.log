@@ -1,0 +1,11 @@
+2023-11-22 15:50:37.458 [error] thread 'main' panicked at src/bin/code/main.rs:39:90:
+
+2023-11-22 15:50:37.460 [error] called `Result::unwrap()` on an `Err` value: WrappedError(WrappedError { message: "error creating directory /home/yusuf/.vscode/cli", original: "Permission denied (os error 13)" })
+
+2023-11-22 15:50:37.460 [error] note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+2023-11-22 15:50:37.467 [error] SyntaxError: "undefined" is not valid JSON
+    at JSON.parse (<anonymous>)
+    at n.L (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:101:7744)
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async n.initialize (/opt/visual-studio-code/resources/app/out/vs/code/node/sharedProcess/sharedProcessMain.js:101:6619)

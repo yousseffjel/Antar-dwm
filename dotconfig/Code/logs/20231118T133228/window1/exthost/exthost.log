@@ -1,0 +1,22 @@
+2023-11-18 13:32:37.532 [info] Extension host with pid 27081 started
+2023-11-18 13:32:38.073 [info] ExtensionService#_doActivateExtension vscode.emmet, startup: false, activationEvent: 'onLanguage'
+2023-11-18 13:32:38.927 [info] ExtensionService#_doActivateExtension vscode.git-base, startup: true, activationEvent: '*', root cause: vscode.git
+2023-11-18 13:32:39.935 [info] ExtensionService#_doActivateExtension vscode.git, startup: true, activationEvent: '*'
+2023-11-18 13:32:40.259 [info] ExtensionService#_doActivateExtension vscode.github, startup: true, activationEvent: '*'
+2023-11-18 13:32:40.744 [info] Eager extensions activated
+2023-11-18 13:32:40.941 [info] ExtensionService#_doActivateExtension vscode.debug-auto-launch, startup: false, activationEvent: 'onStartupFinished'
+2023-11-18 13:32:40.971 [info] ExtensionService#_doActivateExtension vscode.merge-conflict, startup: false, activationEvent: 'onStartupFinished'
+2023-11-18 13:32:41.037 [info] ExtensionService#_doActivateExtension Catppuccin.catppuccin-vsc, startup: false, activationEvent: 'onStartupFinished'
+2023-11-18 13:32:52.383 [info] Extension host terminating: renderer closed the MessagePort
+2023-11-18 13:32:52.412 [info] Extension host with pid 27081 exiting with code 0
+2023-11-18 13:32:58.588 [info] Extension host with pid 28396 started
+2023-11-18 13:32:58.588 [info] Skipping acquiring lock for /home/yusuf/.config/Code/User/workspaceStorage/84d60637578200562c4cd2d0aaa39a4a.
+2023-11-18 13:32:59.484 [info] ExtensionService#_doActivateExtension vscode.git-base, startup: true, activationEvent: '*', root cause: vscode.git
+2023-11-18 13:32:59.752 [info] ExtensionService#_doActivateExtension vscode.emmet, startup: false, activationEvent: 'onLanguage'
+2023-11-18 13:33:00.550 [info] ExtensionService#_doActivateExtension vscode.git, startup: true, activationEvent: '*'
+2023-11-18 13:33:00.880 [info] ExtensionService#_doActivateExtension vscode.github, startup: true, activationEvent: '*'
+2023-11-18 13:33:01.402 [info] Eager extensions activated
+2023-11-18 13:33:02.041 [info] ExtensionService#_doActivateExtension vscode.debug-auto-launch, startup: false, activationEvent: 'onStartupFinished'
+2023-11-18 13:33:02.053 [info] ExtensionService#_doActivateExtension vscode.merge-conflict, startup: false, activationEvent: 'onStartupFinished'
+2023-11-18 13:33:02.099 [info] ExtensionService#_doActivateExtension Catppuccin.catppuccin-vsc, startup: false, activationEvent: 'onStartupFinished'
+2023-11-18 13:33:02.559 [info] ExtensionService#_doActivateExtension vscode.github-authentication, startup: false, activationEvent: 'onAuthenticationRequest:github'
