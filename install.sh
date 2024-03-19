@@ -68,9 +68,9 @@ if [[ $inst =~ ^[Nn]$ ]]; then
         fi
 
 if [[ $inst =~ ^[Yy]$ ]]; then
-   app_pkgs="base-devel libx11 libxft libxinerama freetype2 sxhkd local-by-flywheel xorg polkit-kde-agent ly thunar feh picom unzip unrar wget vim tmux lxappearance betterlockscreen visual-studio-code-bin network-manager-applet gvfs jq tlp auto-cpufreq"
-   app_pkgs2="neofetch flameshot dunst ffmpeg xclip bat neovim viewnior gparted mpv playerctl brightnessctl pamixer pavucontrol ffmpegthumbnailer tumbler thunar-archive-plugin htop xdg-user-dirs pacman-contrib ttf-joypixels ttf-font-awesome noto-fonts-emoji deemix-gui-appimage syncthing-bin"
-   app_pkgs3="timeshift grub-btrfs telegram-desktop figlet opendoas rhythmbox dust thorium-browser-bin qbittorrent trash-cli freedownloadmanager zsync tar sudo xsel sed grep curl nodejs npm cargo tree lazygit binutils coreutils fuse python-pip xkblayout-state-git brightness"
+   app_pkgs="base-devel libx11 libxft libxinerama freetype2 sxhkd xorg polkit-kde-agent ly thunar feh picom unzip unrar wget vim tmux lxappearance betterlockscreen visual-studio-code-bin network-manager-applet gvfs jq tlp auto-cpufreq"
+   app_pkgs2="neofetch flameshot dunst ffmpeg xclip bat neovim viewnior gparted mpv playerctl brightnessctl pamixer pavucontrol ffmpegthumbnailer tumbler thunar-archive-plugin htop xdg-user-dirs pacman-contrib ttf-joypixels ttf-font-awesome noto-fonts-emoji"
+   app_pkgs3="timeshift telegram-desktop figlet opendoas rhythmbox dust thorium-browser-bin trash-cli freedownloadmanager zsync tar xsel sed grep curl nodejs npm cargo tree lazygit binutils coreutils fuse python-pip xkblayout-state-git brightness"
 
 
     if ! yay -S --noconfirm $app_pkgs $app_pkgs2 $app_pkgs3 2>&1 | tee -a $LOG; then
@@ -90,7 +90,6 @@ fi
 
 ### link Config Files ###
 printf " linking config files...\n"
-#sudo mkdir $HOME/.config
 if [[ ! -d $HOME/.config ]]; then
     sudo mkdir -p $HOME/.config
 fi
@@ -99,22 +98,21 @@ ln -sf $HOME/Antar-dwm/dotconfig/neofetch $HOME/.config/
 ln -sf $HOME/Antar-dwm/dotconfig/sxhkd $HOME/.config/
 ln -sf $HOME/Antar-dwm/dotconfig/betterlockscreen $HOME/.config/
 ln -sf $HOME/Antar-dwm/dotconfig/dunst $HOME/.config/
-ln -sf $HOME/Antar-dwm/dotconfig/tmux $HOME/.config/
-ln -sf $HOME/Antar-dwm/dotconfig/Code $HOME/.config/
-ln -sf $HOME/Antar-dwm/dotconfig/aliases $HOME/.config/
+ln -sf $HOME/Antar-dwm/dotconfig/kitty $HOME/.config/
 ln -sf $HOME/Antar-dwm/dotconfig/picom $HOME/.config/
-ln -sf $HOME/Antar-dwm/dotconfig/.Xresources $HOME/
+ln -sf $HOME/Antar-dwm/dotconfig/.Xresources $HOME/.Xresources
+cp -R $HOME/Antar-dwm/dotconfig/Code $HOME/.config/
 
 # autostart for dwm
 if [[ ! -d $HOME/.local/share/dwm ]]; then
     sudo mkdir -p $HOME/.local/share/dwm
 fi
-sudo ln -sf $HOME/Antar-dwm/dotconfig/autostart.sh $HOME/.local/share/dwm/
+sudo ln -sf $HOME/Antar-dwm/dotconfig/autostart.sh $HOME/.local/share/dwm/autostart.sh
 
 
 ### copy another files ###
 # config doas
-sudo cp $HOME/Antar-dwm/dotconfig/doas.conf /etc/
+sudo cp -R $HOME/Antar-dwm/dotconfig/doas.conf /etc/
 
 ### for tmux ###
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
@@ -128,11 +126,11 @@ fi
 if [[ ! -d /usr/share/fonts ]]; then
     sudo mkdir -p /usr/share/fonts
 fi
-sudo cp -r $HOME/Antar-dwm/Source/fonts/* $HOME/.local/share/fonts/
-sudo cp -r $HOME/Antar-dwm/Source/fonts/* /usr/share/fonts/
+sudo cp -R $HOME/Antar-dwm/Source/fonts/* $HOME/.local/share/fonts/
+sudo cp -R $HOME/Antar-dwm/Source/fonts/* /usr/share/fonts/
 
 # Reloading Font
-fc-cache -vf
+fc-cache -vf && sudo fc-cache -vf
 
 
 ### Add themes ###
@@ -143,8 +141,8 @@ fi
 if [[ ! -d /usr/share/themes ]]; then
     sudo mkdir -p /usr/share/themes
 fi
-sudo cp -r $HOME/Antar-dwm/Source/themes/* $HOME/.themes/
-sudo cp -r $HOME/Antar-dwm/Source/themes/* /usr/share/themes/
+sudo cp -R $HOME/Antar-dwm/Source/themes/* $HOME/.themes/
+sudo cp -R $HOME/Antar-dwm/Source/themes/* /usr/share/themes/
 
 
 ### Add icons ###
@@ -155,29 +153,36 @@ fi
 if [[ ! -d /usr/share/icons ]]; then
     sudo mkdir -p /usr/share/icons
 fi
-sudo cp -r $HOME/Antar-dwm/Source/icons/* $HOME/.icons/
-sudo cp -r $HOME/Antar-dwm/Source/icons/* /usr/share/icons/
+sudo cp -R $HOME/Antar-dwm/Source/icons/* $HOME/.icons/
+sudo cp -R $HOME/Antar-dwm/Source/icons/* /usr/share/icons/
 
 
 ### for vscode ###
 if [[ ! -d $HOME/.vscode ]]; then
     sudo mkdir -p $HOME/.vscode
 fi
-sudo cp -r $HOME/Antar-dwm/Source/code/* $HOME/.vscode
+sudo cp -R $HOME/Antar-dwm/Source/code/* $HOME/.vscode
 
 
 ### Clone suckless's ###
-cd $HOME/
+if [[ ! -d $HOME/src ]]; then
+    sudo mkdir -p $HOME/src
+fi
+
+cd $HOME/src
 git clone https://github.com/yousseffjel/suckless.git
 cd ~/suckless/dwm;sudo rm -f config.h;make;sudo make install clean
-cd ~/suckless/slstatus;sudo rm -f config.h;make;sudo make install clean
-cd ~/suckless/st;sudo rm -f config.h;make;sudo make install clean
 cd ~/suckless/dmenu;sudo rm -f config.h;make;sudo make install clean
+cd ~/suckless/slstatus;sudo rm -f config.h;make;sudo make install clean
 
 
 ### clone bin repo
-cd $HOME/
+cd $HOME/src
 git clone https://github.com/yousseffjel/bin.git
+
+### clone wallpaper repo
+cd $HOME/src
+git clone https://github.com/yousseffjel/wallpaper.git
 
 
 ### Enable ly  ###
@@ -190,8 +195,13 @@ if [[ ! -d /usr/share/xsessions ]]; then
     sudo mkdir -p /usr/share/xsessions
 fi
 
-sudo cp $HOME/Antar-dwm/dotconfig/dwm.desktop /usr/share/xsessions/dwm.desktop
+sudo cp -R $HOME/Antar-dwm/dotconfig/dwm.desktop /usr/share/xsessions/dwm.desktop
 
+### fix open kitty from thunar ###
+if [[ ! -d $HOME/.config/xfce4 ]]; then
+    sudo mkdir -p $HOME/.config/xfce4
+fi
+ln -sf $HOME/Antar-dwm/dotconfig/helpers.rc ~/.config/xfce4/helpers.rc
 
 # BLUETOOTH
 read -n1 -rep "${CAT} OPTIONAL - Would you like to install Bluetooth packages? (y/n)" BLUETOOTH
@@ -218,7 +228,7 @@ sudo systemctl enable --now auto-cpufreq.service
 sudo systemctl enable betterlockscreen@$USER
 
 # set wallpaper for betterlockscreen
-betterlockscreen -u ~/Antar-dwm/wallpapers/cat_lofi_cafe.jpg --blur
+betterlockscreen -u ~/src/wallpapers/cat_lofi_cafe.jpg --blur
 
 # fix Xorg-log
 sudo chown yusuf: ~/.local/share/*

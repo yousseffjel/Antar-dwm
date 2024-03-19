@@ -1,6 +1,0 @@
-2023-11-21 10:33:59.540 [info] update#setState idle
-2023-11-21 10:33:59.789 [error] Error: Unable to read file '/home/yusuf/.vscode/argv.json' (Error: Unable to resolve nonexistent file '/home/yusuf/.vscode/argv.json')
-    at c.F (/opt/visual-studio-code/resources/app/out/vs/code/electron-main/main.js:59:18255)
-    at c.D (/opt/visual-studio-code/resources/app/out/vs/code/electron-main/main.js:59:18050)
-    at async c.C (/opt/visual-studio-code/resources/app/out/vs/code/electron-main/main.js:59:17362)
-    at async ut.Y (/opt/visual-studio-code/resources/app/out/vs/code/electron-main/main.js:106:68241)

@@ -1,3 +1,0 @@
-2023-11-21 12:09:16.273 [warning] Via 'product.json#extensionEnabledApiProposals' extension 'ms-dotnettools.dotnet-interactive-vscode' wants API proposal 'languageConfigurationAutoClosingPairs' but that proposal DOES NOT EXIST. Likely, the proposal has been finalized (check 'vscode.d.ts') or was abandoned.
-2023-11-21 12:09:16.659 [info] Initial editor state {"filesToOpenOrCreate":[{"fileUri":{"$mid":1,"path":"/home/yusuf/WordPress/Pro Plugins/masterstudy.4.8.23-package/MasterStudy Theme Documentation.url","scheme":"file"},"type":1,"exists":true,"options":{}}],"filesToDiff":[],"filesToMerge":[]}
-2023-11-21 12:09:38.109 [warning] [lifecycle] onWillShutdown is taking a long time, pending operations: join.closeStorage

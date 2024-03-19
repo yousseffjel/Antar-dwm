@@ -1,9 +1,9 @@
 dbus-update-activation-environment --systemd DBUS_SESSION_BUS_ADDRESS DISPLAY XAUTHORITY &
-xrdb -merge ~/.Xresources &
 /usr/lib/polkit-kde-authentication-agent-1 &
+xrdb -merge ~/.Xresources &
 slstatus &
-$HOME/bin/wallpaper.sh &
 picom &
+$HOME/bin/wallpaper.sh &
 sxhkd -c $HOME/.config/sxhkd/sxhkdrc & 
 blueman-applet &
 nm-applet --indicator &
