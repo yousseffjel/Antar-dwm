@@ -210,10 +210,27 @@ cd ~/src/suckless/slstatus;sudo rm -f config.h;make;sudo make install clean
 cd $HOME/src
 git clone https://github.com/yousseffjel/bin.git
 
-### clone wallpaper repo
-cd $HOME/src
-git clone https://github.com/yousseffjel/wallpaper.git
-
+# ------------------------------------------------------
+# Install wallpapers
+# ------------------------------------------------------
+echo -e "${GREEN}"
+figlet "Wallpapers"
+echo -e "${NONE}"
+if [ ! -d ~/src/wallpaper ]; then
+    echo "Do you want to download the wallpapers from repository https://github.com/yousseffjel/wallpaper ?"
+    echo ""
+    if gum confirm "Do you want to download the repository?" ;then
+        if [[ ! -d ~/src ]]; then
+            mkdir -p ~/src
+        fi
+        cd $HOME/src
+        git clone https://github.com/yousseffjel/wallpaper.git
+        echo "Wallpapers from the repository installed successfully."
+    fi
+else
+    echo ":: ~/src/wallpaper folder already exists."
+fi
+echo ""
 
 ### Enable ly  ###
 printf " Enable ly"
