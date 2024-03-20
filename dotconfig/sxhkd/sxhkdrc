@@ -12,14 +12,11 @@ super + e
 super + v 
 	code
 
-super + shift + b
-bitwarden-desktop
-
 super + alt + b
 	blueman-manager
 
-super + shift + v
-  copyq read 0 1 2 3 4 5 6 7 8 9 10 | uniq | dmenu | xsel -ip  && copyq paste
+#super + shift + v
+#  copyq read 0 1 2 3 4 5 6 7 8 9 10 | uniq | dmenu | xsel -ip  && copyq paste
 
 
 # Power key
@@ -30,18 +27,18 @@ super + shift + l
 	 betterlockscreen -l
 
 # key for mount & umount 
-super + shift + m
+super + alt + m
   ~/src/bin/mountmenu.sh
 
-super + shift + u
+super + alt + u
   ~/src/bin/umountmenu.sh
 
 # ScreenShot
 super + p
-	flameshot full -p $HOME/Pictures/Screenshots/
+	flameshot full -p $HOME/win/Users/YuSuf/Pictures/Screenshots/
 
 super + shift + p
-	flameshot gui -p $HOME/Pictures/Screenshots/
+	flameshot gui -p $HOME/win/Users/YuSuf/Pictures/Screenshots/
 
 super + alt + p
 	flameshot gui --clipboard
