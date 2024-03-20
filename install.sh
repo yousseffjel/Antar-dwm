@@ -123,6 +123,19 @@ ln -sf $HOME/Antar-dwm/dotconfig/picom $HOME/.config/
 ln -sf $HOME/Antar-dwm/dotconfig/.Xresources $HOME/.Xresources
 cp -R $HOME/Antar-dwm/dotconfig/Code $HOME/.config/
 
+
+# config for tmux
+if [[ ! -d $HOME/.config/tmux ]]; then
+    mkdir -p $HOME/.config/tmux
+fi
+
+ln -sf $HOME/Antar-dwm/dotconfig/tmux/tmux.conf $HOME/.config/tmux/tmux.conf
+ln -sf $HOME/Antar-dwm/dotconfig/tmux/tmux.reset.conf $HOME/.config/tmux/tmux.reset.conf
+
+sleep 1
+
+1git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
 # autostart for dwm
 if [[ ! -d $HOME/.local/share/dwm ]]; then
     sudo mkdir -p $HOME/.local/share/dwm
@@ -132,10 +145,7 @@ sudo ln -sf $HOME/Antar-dwm/dotconfig/autostart.sh $HOME/.local/share/dwm/autost
 
 ### copy another files ###
 # config doas
-sudo cp -R $HOME/Antar-dwm/dotconfig/doas.conf /etc/
-
-### for tmux ###
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+sudo cp -R $HOME/Antar-dwm/dotconfig/doas.conf /etc/doas.conf
 
 
 ### Add Fonts ###
