@@ -23,7 +23,7 @@ printf "\n
 $YELLOW  Some commands requires you to enter your password inorder to execute
 If you are worried about entering your password, you can cancel the script now with CTRL Q or CTRL C and review contents of this script. \n"
 
-sleep 3
+sleep 2
 
 
 #pacman
@@ -89,8 +89,8 @@ if [[ $inst =~ ^[Nn]$ ]]; then
 
 if [[ $inst =~ ^[Yy]$ ]]; then
    app_pkgs="base-devel libx11 libxft libxinerama freetype2 sxhkd xorg polkit-kde-agent ly thunar feh picom unzip unrar wget vim tmux lxappearance betterlockscreen visual-studio-code-bin network-manager-applet gvfs jq tlp auto-cpufreq"
-   app_pkgs2="neofetch flameshot dunst ffmpeg xclip bat neovim viewnior gparted mpv playerctl brightnessctl pamixer pavucontrol ffmpegthumbnailer tumbler thunar-archive-plugin htop xdg-user-dirs pacman-contrib ttf-joypixels ttf-font-awesome noto-fonts-emoji"
-   app_pkgs3="timeshift telegram-desktop figlet opendoas rhythmbox dust thorium-browser-bin trash-cli zsync tar xsel sed grep curl nodejs npm cargo tree lazygit binutils coreutils fuse python-pip xkblayout-state-git brightness"
+   app_pkgs2="neofetch flameshot dunst ffmpeg xclip gparted mpv playerctl brightnessctl pamixer pavucontrol ffmpegthumbnailer tumbler thunar-archive-plugin htop xdg-user-dirs pacman-contrib ttf-joypixels ttf-font-awesome noto-fonts-emoji"
+   app_pkgs3="timeshift telegram-desktop figlet opendoas dust thorium-browser-bin trash-cli zsync tar xsel sed grep curl nodejs npm cargo tree lazygit binutils coreutils fuse python-pip xkblayout-state-git brightness"
 
 
     if ! yay -S --noconfirm $app_pkgs $app_pkgs2 $app_pkgs3 2>&1 | tee -a $LOG; then
@@ -122,7 +122,7 @@ ln -sf $HOME/Antar-dwm/dotconfig/kitty $HOME/.config/
 ln -sf $HOME/Antar-dwm/dotconfig/picom $HOME/.config/
 ln -sf $HOME/Antar-dwm/dotconfig/.Xresources $HOME/.Xresources
 cp -R $HOME/Antar-dwm/dotconfig/Code $HOME/.config/
-
+sudo cp -R $HOME/Antar-dwm/dotconfig/doas.conf /etc/doas.conf
 
 # config for tmux
 if [[ ! -d $HOME/.config/tmux ]]; then
@@ -134,18 +134,16 @@ ln -sf $HOME/Antar-dwm/dotconfig/tmux/tmux.reset.conf $HOME/.config/tmux/tmux.re
 
 sleep 1
 
-1git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+if [[ ! -d $HOME/.tmux ]]; then
+    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+fi
+
 
 # autostart for dwm
 if [[ ! -d $HOME/.local/share/dwm ]]; then
     sudo mkdir -p $HOME/.local/share/dwm
 fi
 sudo ln -sf $HOME/Antar-dwm/dotconfig/autostart.sh $HOME/.local/share/dwm/autostart.sh
-
-
-### copy another files ###
-# config doas
-sudo cp -R $HOME/Antar-dwm/dotconfig/doas.conf /etc/doas.conf
 
 
 ### Add Fonts ###
@@ -171,7 +169,7 @@ fi
 if [[ ! -d /usr/share/themes ]]; then
     sudo mkdir -p /usr/share/themes
 fi
-sudo cp -R $HOME/Antar-dwm/Source/themes/* $HOME/.themes/
+cp -R $HOME/Antar-dwm/Source/themes/* $HOME/.themes/
 sudo cp -R $HOME/Antar-dwm/Source/themes/* /usr/share/themes/
 
 
@@ -183,7 +181,7 @@ fi
 if [[ ! -d /usr/share/icons ]]; then
     sudo mkdir -p /usr/share/icons
 fi
-sudo cp -R $HOME/Antar-dwm/Source/icons/* $HOME/.icons/
+cp -R $HOME/Antar-dwm/Source/icons/* $HOME/.icons/
 sudo cp -R $HOME/Antar-dwm/Source/icons/* /usr/share/icons/
 
 
@@ -191,24 +189,27 @@ sudo cp -R $HOME/Antar-dwm/Source/icons/* /usr/share/icons/
 if [[ ! -d $HOME/.vscode ]]; then
     mkdir -p $HOME/.vscode
 fi
-sudo cp -R $HOME/Antar-dwm/Source/code/* $HOME/.vscode
+cp -R $HOME/Antar-dwm/Source/code/* $HOME/.vscode
 
-
-### Clone suckless's ###
+### check if src folder exists ###
 if [[ ! -d $HOME/src ]]; then
     mkdir -p $HOME/src
 fi
 
-cd $HOME/src
-git clone https://github.com/yousseffjel/suckless.git
+### Clone suckless's ###
+if [[ ! -d $HOME/src/suckless ]]; then
+     cd $HOME/src && git clone https://github.com/yousseffjel/suckless.git 
+fi
+
 cd ~/src/suckless/dwm;sudo rm -f config.h;make;sudo make install clean
 cd ~/src/suckless/dmenu;sudo rm -f config.h;make;sudo make install clean
 cd ~/src/suckless/slstatus;sudo rm -f config.h;make;sudo make install clean
 
 
-### clone bin repo
-cd $HOME/src
-git clone https://github.com/yousseffjel/bin.git
+### clone bin repo ###
+if [[ ! -d $HOME/src/bin ]]; then
+     cd $HOME/src && git clone https://github.com/yousseffjel/bin.git 
+fi
 
 # ------------------------------------------------------
 # Install wallpapers
@@ -258,7 +259,7 @@ if [[ $BLUETOOTH =~ ^[Yy]$ ]]; then
     if ! yay -S --noconfirm $blue_pkgs 2>&1 | tee -a $LOG; then
        	print_error "Failed to install bluetooth packages - please check the install.log"    
     printf " Activating Bluetooth Services...\n"
-    sudo systemctl enable --now bluetooth.service
+    sudo systemctl enable bluetooth.service
     sleep 2
     fi
 else
@@ -266,7 +267,6 @@ else
 	fi
 
 #### Enable some servises ####
- 
 # apps for power manager 
 sudo systemctl enable --now tlp.service
 sudo systemctl enable --now auto-cpufreq.service
@@ -275,31 +275,11 @@ sudo systemctl enable --now auto-cpufreq.service
 sudo systemctl enable betterlockscreen@$USER
 
 # set wallpaper for betterlockscreen
-betterlockscreen -u ~/src/wallpapers/cat_lofi_cafe.jpg --blur
+betterlockscreen -u ~/src/wallpaper/cat_lofi_cafe.jpg --blur
 
 # fix Xorg-log
 sudo chown yusuf: ~/.local/share/*
 sudo chown yusuf: ~/.local/*
-
-
-
-# pacman
-if [ -f /etc/pacman.conf ] && [ ! -f /etc/pacman.conf.t2.bkp ]
-    then
-    echo -e "\033[0;32m[PACMAN]\033[0m adding extra spice to pacman..."
-
-    sudo cp /etc/pacman.conf /etc/pacman.conf.t2.bkp
-    sudo sed -i "/^#Color/c\Color\nILoveCandy
-    /^#VerbosePkgLists/c\VerbosePkgLists
-    /^#ParallelDownloads/c\ParallelDownloads = 5" /etc/pacman.conf
-    sudo pacman -Syyu
-    sudo pacman -Fy
-
-else
-    echo -e "\033[0;33m[SKIP]\033[0m pacman is already configured..."
-fi
-
-sleep 3
 
 ### Script is done ###
 printf "\n${GREEN} Installation Completed.\n"
