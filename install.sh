@@ -6,6 +6,7 @@ RED="$(tput setaf 1)[ERROR]$(tput sgr0)"
 YELLOW="$(tput setaf 3)[NOTE]$(tput sgr0)"
 CAT="$(tput setaf 6)[ACTION]$(tput sgr0)"
 LOG="install.log"
+CloneDir=$(pwd)
 
 # Set the script to exit on error
 set -e
@@ -88,12 +89,14 @@ if [[ $inst =~ ^[Nn]$ ]]; then
         fi
 
 if [[ $inst =~ ^[Yy]$ ]]; then
-   app_pkgs="base-devel libx11 libxft libxinerama freetype2 sxhkd xorg polkit-kde-agent ly thunar feh picom unzip unrar wget vim tmux lxappearance betterlockscreen visual-studio-code-bin network-manager-applet gvfs jq tlp auto-cpufreq"
-   app_pkgs2="neofetch flameshot dunst ffmpeg xclip gparted mpv playerctl brightnessctl pamixer pavucontrol ffmpegthumbnailer tumbler thunar-archive-plugin htop xdg-user-dirs pacman-contrib ttf-joypixels ttf-font-awesome noto-fonts-emoji"
+   base_pkgs="base-devel libx11 libxft libxinerama freetype2 xorg"
+   app_pkgs="sxhkd polkit-kde-agent ly thunar feh picom unzip unrar wget vim tmux lxappearance betterlockscreen visual-studio-code-bin network-manager-applet gvfs jq tlp auto-cpufreq"
+   app_pkgs2="neofetch flameshot dunst ffmpeg xclip gparted mpv playerctl brightnessctl pamixer pavucontrol ffmpegthumbnailer tumbler thunar-archive-plugin htop xdg-user-dirs pacman-contrib"
    app_pkgs3="timeshift telegram-desktop figlet opendoas dust thorium-browser-bin trash-cli zsync tar xsel sed grep curl nodejs npm cargo tree lazygit binutils coreutils fuse python-pip xkblayout-state-git brightness"
+   font_pkgs="ttf-joypixels ttf-font-awesome noto-fonts-emoji"
 
 
-    if ! yay -S --noconfirm $app_pkgs $app_pkgs2 $app_pkgs3 2>&1 | tee -a $LOG; then
+    if ! yay -S --noconfirm $base_pkgs $app_pkgs $app_pkgs2 $app_pkgs3 $font_pkgs 2>&1 | tee -a $LOG; then
         print_error " Failed to install additional packages - please check the install.log \n"
         exit 1
     fi
@@ -114,48 +117,48 @@ if [[ ! -d $HOME/.config ]]; then
     mkdir -p $HOME/.config
 fi
 
-ln -sf $HOME/Antar-dwm/dotconfig/neofetch $HOME/.config/
-ln -sf $HOME/Antar-dwm/dotconfig/sxhkd $HOME/.config/
-ln -sf $HOME/Antar-dwm/dotconfig/betterlockscreen $HOME/.config/
-ln -sf $HOME/Antar-dwm/dotconfig/dunst $HOME/.config/
-ln -sf $HOME/Antar-dwm/dotconfig/kitty $HOME/.config/
-ln -sf $HOME/Antar-dwm/dotconfig/picom $HOME/.config/
-ln -sf $HOME/Antar-dwm/dotconfig/.Xresources $HOME/.Xresources
-cp -R $HOME/Antar-dwm/dotconfig/Code $HOME/.config/
-sudo cp -R $HOME/Antar-dwm/dotconfig/doas.conf /etc/doas.conf
+ln -sf $CloneDir/dotconfig/neofetch $HOME/.config/
+ln -sf $CloneDir/dotconfig/sxhkd $HOME/.config/
+ln -sf $CloneDir/dotconfig/betterlockscreen $HOME/.config/
+ln -sf $CloneDir/dotconfig/dunst $HOME/.config/
+ln -sf $CloneDir/dotconfig/kitty $HOME/.config/
+ln -sf $CloneDir/dotconfig/picom $HOME/.config/
+ln -sf $CloneDir/dotconfig/.Xresources $HOME/.Xresources
+cp -R  dotconfig/Code $HOME/.config/
+sudo cp -R dotconfig/doas.conf /etc/doas.conf
 
 # config for tmux
 if [[ ! -d $HOME/.config/tmux ]]; then
     mkdir -p $HOME/.config/tmux
 fi
 
-ln -sf $HOME/Antar-dwm/dotconfig/tmux/tmux.conf $HOME/.config/tmux/tmux.conf
-ln -sf $HOME/Antar-dwm/dotconfig/tmux/tmux.reset.conf $HOME/.config/tmux/tmux.reset.conf
+ln -sf $CloneDir/dotconfig/tmux/tmux.conf $HOME/.config/tmux/tmux.conf
+ln -sf $CloneDir/dotconfig/tmux/tmux.reset.conf $HOME/.config/tmux/tmux.reset.conf
 
 sleep 1
 
-if [[ ! -d $HOME/.tmux ]]; then
+if [[ ! -d $HOME/.tmux/plugins/tpm ]]; then
     git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 fi
 
 
 # autostart for dwm
 if [[ ! -d $HOME/.local/share/dwm ]]; then
-    sudo mkdir -p $HOME/.local/share/dwm
+    mkdir -p $HOME/.local/share/dwm
 fi
-sudo ln -sf $HOME/Antar-dwm/dotconfig/autostart.sh $HOME/.local/share/dwm/autostart.sh
+ln -sf $CloneDir/dotconfig/autostart.sh $HOME/.local/share/dwm/autostart.sh
 
 
 ### Add Fonts ###
 if [[ ! -d $HOME/.local/share/fonts ]]; then
-    sudo mkdir -p $HOME/.local/share/fonts
+    mkdir -p $HOME/.local/share/fonts
 fi
 
 if [[ ! -d /usr/share/fonts ]]; then
     sudo mkdir -p /usr/share/fonts
 fi
-sudo cp -R $HOME/Antar-dwm/Source/fonts/* $HOME/.local/share/fonts/
-sudo cp -R $HOME/Antar-dwm/Source/fonts/* /usr/share/fonts/
+cp -R Source/fonts/* $HOME/.local/share/fonts/
+sudo cp -R Source/fonts/* /usr/share/fonts/
 
 # Reloading Font
 fc-cache -vf && sudo fc-cache -vf
@@ -169,8 +172,8 @@ fi
 if [[ ! -d /usr/share/themes ]]; then
     sudo mkdir -p /usr/share/themes
 fi
-cp -R $HOME/Antar-dwm/Source/themes/* $HOME/.themes/
-sudo cp -R $HOME/Antar-dwm/Source/themes/* /usr/share/themes/
+cp -R Source/themes/* $HOME/.themes/
+sudo cp -R Source/themes/* /usr/share/themes/
 
 
 ### Add icons ###
@@ -181,15 +184,16 @@ fi
 if [[ ! -d /usr/share/icons ]]; then
     sudo mkdir -p /usr/share/icons
 fi
-cp -R $HOME/Antar-dwm/Source/icons/* $HOME/.icons/
-sudo cp -R $HOME/Antar-dwm/Source/icons/* /usr/share/icons/
+cp -R Source/icons/* $HOME/.icons/
+sudo cp -R Source/icons/* /usr/share/icons/
 
 
 ### for vscode ###
 if [[ ! -d $HOME/.vscode ]]; then
     mkdir -p $HOME/.vscode
 fi
-cp -R $HOME/Antar-dwm/Source/code/* $HOME/.vscode
+cp -R Source/code/* $HOME/.vscode
+
 
 ### check if src folder exists ###
 if [[ ! -d $HOME/src ]]; then
@@ -221,11 +225,7 @@ if [ ! -d ~/src/wallpaper ]; then
     echo "Do you want to download the wallpapers from repository https://github.com/yousseffjel/wallpaper ?"
     echo ""
     if gum confirm "Do you want to download the repository?" ;then
-        if [[ ! -d ~/src ]]; then
-            mkdir -p ~/src
-        fi
-        cd $HOME/src
-        git clone https://github.com/yousseffjel/wallpaper.git
+        cd $HOME/src && git clone https://github.com/yousseffjel/wallpaper.git
         echo "Wallpapers from the repository installed successfully."
     fi
 else
@@ -243,13 +243,13 @@ if [[ ! -d /usr/share/xsessions ]]; then
     sudo mkdir -p /usr/share/xsessions
 fi
 
-sudo cp -R $HOME/Antar-dwm/dotconfig/dwm.desktop /usr/share/xsessions/dwm.desktop
+sudo cp -R $CloneDir/dotconfig/dwm.desktop /usr/share/xsessions/dwm.desktop
 
 ### fix open kitty from thunar ###
 if [[ ! -d $HOME/.config/xfce4 ]]; then
     mkdir -p $HOME/.config/xfce4
 fi
-ln -sf $HOME/Antar-dwm/dotconfig/helpers.rc ~/.config/xfce4/helpers.rc
+ln -sf $CloneDir/dotconfig/helpers.rc ~/.config/xfce4/helpers.rc
 
 # BLUETOOTH
 read -n1 -rep "${CAT} OPTIONAL - Would you like to install Bluetooth packages? (y/n)" BLUETOOTH
@@ -272,7 +272,7 @@ sudo systemctl enable --now tlp.service
 sudo systemctl enable --now auto-cpufreq.service
 
 # betterlockscreen
-sudo systemctl enable betterlockscreen@$USER
+sudo systemctl enable --now betterlockscreen@$USER
 
 # set wallpaper for betterlockscreen
 betterlockscreen -u ~/src/wallpaper/cat_lofi_cafe.jpg --blur
