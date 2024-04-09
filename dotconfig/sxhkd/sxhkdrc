@@ -44,6 +44,8 @@ super + alt + p
 	flameshot gui --clipboard
 
 
+super + shift + c 
+ xcolor -s 
 
 # Brightness control
 XF86MonBrightnessUp

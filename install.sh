@@ -90,7 +90,7 @@ if [[ $inst =~ ^[Nn]$ ]]; then
 
 if [[ $inst =~ ^[Yy]$ ]]; then
    base_pkgs="base-devel libx11 libxft libxinerama freetype2 xorg"
-   app_pkgs="sxhkd polkit-kde-agent ly thunar feh picom unzip unrar wget vim tmux lxappearance betterlockscreen visual-studio-code-bin network-manager-applet gvfs jq tlp auto-cpufreq"
+   app_pkgs="sxhkd polkit-kde-agent ly thunar xcolor feh picom unzip unrar wget vim tmux lxappearance betterlockscreen visual-studio-code-bin network-manager-applet gvfs jq tlp auto-cpufreq"
    app_pkgs2="neofetch flameshot dunst ffmpeg xclip gparted mpv playerctl brightnessctl pamixer pavucontrol ffmpegthumbnailer tumbler thunar-archive-plugin htop xdg-user-dirs pacman-contrib"
    app_pkgs3="timeshift telegram-desktop figlet opendoas dust thorium-browser-bin trash-cli zsync tar xsel sed grep curl nodejs npm cargo tree lazygit binutils coreutils fuse python-pip xkblayout-state-git brightness"
    font_pkgs="ttf-joypixels ttf-font-awesome noto-fonts-emoji"
