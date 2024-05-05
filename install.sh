@@ -90,7 +90,7 @@ if [[ $inst =~ ^[Nn]$ ]]; then
 
 if [[ $inst =~ ^[Yy]$ ]]; then
    base_pkgs="base-devel libx11 libxft libxinerama freetype2 xorg"
-   app_pkgs="sxhkd polkit-kde-agent ly thunar xcolor feh picom unzip unrar wget vim tmux lxappearance betterlockscreen visual-studio-code-bin network-manager-applet gvfs jq tlp auto-cpufreq"
+   app_pkgs="sxhkd polkit-kde-agent ly thunar xcolor feh picom unzip unrar wget vim tmux lxappearance betterlockscreen vscodium-bin network-manager-applet gvfs jq tlp tlpui auto-cpufreq"
    app_pkgs2="neofetch flameshot dunst ffmpeg xclip gparted mpv playerctl brightnessctl pamixer pavucontrol ffmpegthumbnailer tumbler thunar-archive-plugin htop xdg-user-dirs pacman-contrib"
    app_pkgs3="timeshift telegram-desktop figlet opendoas dust thorium-browser-bin trash-cli zsync tar xsel sed grep curl nodejs npm cargo tree lazygit binutils coreutils fuse python-pip xkblayout-state-git brightness"
    font_pkgs="ttf-joypixels ttf-font-awesome noto-fonts-emoji"
@@ -124,7 +124,7 @@ ln -sf $CloneDir/dotconfig/dunst $HOME/.config/
 ln -sf $CloneDir/dotconfig/kitty $HOME/.config/
 ln -sf $CloneDir/dotconfig/picom $HOME/.config/
 ln -sf $CloneDir/dotconfig/.Xresources $HOME/.Xresources
-cp -R  dotconfig/Code $HOME/.config/
+#cp -R  dotconfig/Code $HOME/.config/
 sudo cp -R dotconfig/doas.conf /etc/doas.conf
 
 # config for tmux
@@ -189,10 +189,10 @@ sudo cp -R Source/icons/* /usr/share/icons/
 
 
 ### for vscode ###
-if [[ ! -d $HOME/.vscode ]]; then
-    mkdir -p $HOME/.vscode
-fi
-cp -R Source/code/* $HOME/.vscode
+#if [[ ! -d $HOME/.vscode ]]; then
+#    mkdir -p $HOME/.vscode
+#fi
+#cp -R Source/code/* $HOME/.vscode
 
 
 ### check if src folder exists ###
@@ -268,8 +268,12 @@ else
 
 #### Enable some servises ####
 # apps for power manager 
-sudo systemctl enable --now tlp.service
-sudo systemctl enable --now auto-cpufreq.service
+sudo systemctl enable tlp.service
+sleep 1
+sudo systemctl start tlp.service
+sleep 2
+
+#sudo systemctl enable --now auto-cpufreq.service
 
 # betterlockscreen
 sudo systemctl enable --now betterlockscreen@$USER
