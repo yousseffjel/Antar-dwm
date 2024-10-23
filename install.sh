@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Define variables
+# Define constants for colors and log file
 GREEN="$(tput setaf 2)[OK]$(tput sgr0)"
 RED="$(tput setaf 1)[ERROR]$(tput sgr0)"
 YELLOW="$(tput setaf 3)[NOTE]$(tput sgr0)"
@@ -8,283 +8,195 @@ CAT="$(tput setaf 6)[ACTION]$(tput sgr0)"
 LOG="install.log"
 CloneDir=$(pwd)
 
-# Set the script to exit on error
-set -e
+# Set the script to exit on error and log failures
+set -e 
+trap 'echo -e "${RED}Script failed. Check $LOG for more details.${NONE}"' ERR
 
-printf "$(tput setaf 2) Welcome to the Arch Linux YAY dwm installer!\n $(tput sgr0)"
-
-sleep 2
-
-printf "$YELLOW PLEASE BACKUP YOUR FILES BEFORE PROCEEDING!
-This script will overwrite some of your configs and files!"
-
-sleep 2
-
-printf "\n
-$YELLOW  Some commands requires you to enter your password inorder to execute
-If you are worried about entering your password, you can cancel the script now with CTRL Q or CTRL C and review contents of this script. \n"
-
-sleep 2
-
-
-#pacman
-if [ -f /etc/pacman.conf ] && [ ! -f /etc/pacman.conf.t2.bkp ]
-    then
-    echo -e "\033[0;32m[PACMAN]\033[0m adding extra spice to pacman..."
-
-    sudo cp /etc/pacman.conf /etc/pacman.conf.t2.bkp
-    sudo sed -i "/^#Color/c\Color\nILoveCandy
-    /^#VerbosePkgLists/c\VerbosePkgLists
-    /^#ParallelDownloads/c\ParallelDownloads = 5" /etc/pacman.conf
-    sudo pacman -Syyu
-    sudo pacman -Fy
-
-else
-    echo -e "\033[0;33m[SKIP]\033[0m pacman is already configured..."
-fi
-
-sleep 3
-
-
-# Check if yay is installed
-ISyay=/sbin/yay
-
-if [ -f "$ISyay" ]; then
-    printf "\n%s - yay was located, moving on.\n" "$GREEN"
-else 
-    printf "\n%s - yay was NOT located\n" "$YELLOW"
-    read -n1 -rep "${CAT} Would you like to install yay (y,n)" INST
-    if [[ $INST =~ ^[Yy]$ ]]; then
-        git clone https://aur.archlinux.org/yay.git
-        cd yay
-        makepkg -si --noconfirm 2>&1 | tee -a $LOG
-        cd ..
-    else
-        printf "%s - yay is required for this script, now exiting\n" "$RED"
-        exit
-    fi
-# update system before proceed
-    printf "${YELLOW} System Update to avoid issue\n" 
-    yay -Syu --noconfirm 2>&1 | tee -a $LOG
-fi
-
-# Function to print error messages
+# Utility functions for printing messages
 print_error() {
     printf " %s%s\n" "$RED" "$1" "$NC" >&2
 }
 
-# Function to print success messages
 print_success() {
     printf "%s%s%s\n" "$GREEN" "$1" "$NC"
 }
 
+print_note() {
+    printf "%s%s%s\n" "$YELLOW" "$1" "$NC"
+}
 
-### Install packages ####
-read -n1 -rep "${CAT} Would you like to install the packages? (y/n)" inst
-echo
+print_action() {
+    printf "%s%s%s\n" "$CAT" "$1" "$NC"
+}
 
-if [[ $inst =~ ^[Nn]$ ]]; then
-    printf "${YELLOW} No packages installed. Goodbye! \n"
-            exit 1
-        fi
+# Function to update the system and install Reflector for faster mirrors
+update_system() {
+    print_note "Updating the system and optimizing mirrors..."
+    sudo pacman -S --noconfirm reflector
+    sudo reflector --verbose --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
+    sudo pacman -Syyu --noconfirm
+    sudo pacman -Fy
+}
 
-if [[ $inst =~ ^[Yy]$ ]]; then
-   base_pkgs="base-devel libx11 libxft libxinerama freetype2 xorg"
-   app_pkgs="sxhkd polkit-kde-agent ly thunar xcolor feh picom unzip unrar wget vim tmux lxappearance betterlockscreen vscodium-bin network-manager-applet gvfs jq tlp tlpui auto-cpufreq"
-   app_pkgs2="neofetch flameshot dunst ffmpeg xclip gparted mpv playerctl brightnessctl pamixer pavucontrol ffmpegthumbnailer tumbler thunar-archive-plugin htop xdg-user-dirs pacman-contrib"
-   app_pkgs3="timeshift telegram-desktop figlet opendoas dust thorium-browser-bin trash-cli zsync tar xsel sed grep curl nodejs npm cargo tree lazygit binutils coreutils fuse python-pip xkblayout-state-git brightness"
-   font_pkgs="ttf-joypixels ttf-font-awesome noto-fonts-emoji"
+# Function to check if yay is installed, and install it if not
+check_and_install_yay() {
+    if command -v yay &> /dev/null; then
+        print_success "yay is already installed."
+    else 
+        print_note "yay not found. Installing yay..."
+        sudo pacman -S --noconfirm git base-devel
+        git clone https://aur.archlinux.org/yay.git
+        cd yay
+        makepkg -si --noconfirm 2>&1 | tee -a $LOG
+        cd ..
+        print_success "yay installed successfully."
+    fi
+}
 
+# Function to install a list of packages using yay
+install_packages() {
+    base_pkgs="base-devel libx11 libxft libxinerama freetype2 xorg"
+    app_pkgs="sxhkd polkit-kde-agent ly thunar xcolor feh picom unzip unrar wget vim tmux lxappearance betterlockscreen vscodium-bin network-manager-applet gvfs jq tlp tlpui auto-cpufreq"
+    app_pkgs2="neofetch flameshot dunst ffmpeg xclip gparted mpv playerctl brightnessctl pamixer pavucontrol ffmpegthumbnailer tumbler thunar-archive-plugin htop xdg-user-dirs pacman-contrib"
+    app_pkgs3="timeshift telegram-desktop figlet opendoas dust thorium-browser-bin trash-cli zsync tar xsel sed grep curl nodejs npm cargo tree lazygit binutils coreutils fuse python-pip xkblayout-state-git brightness"
+    font_pkgs="ttf-joypixels ttf-font-awesome noto-fonts-emoji"
 
+    print_action "Installing packages..."
     if ! yay -S --noconfirm $base_pkgs $app_pkgs $app_pkgs2 $app_pkgs3 $font_pkgs 2>&1 | tee -a $LOG; then
-        print_error " Failed to install additional packages - please check the install.log \n"
+        print_error "Failed to install additional packages. Please check the install.log."
         exit 1
     fi
     xdg-user-dirs-update
-    echo
-    print_success " All necessary packages installed successfully."
+    print_success "All packages installed successfully."
+}
 
-else
-    echo
-    print_error " Packages not installed - please check the install.log"
-    sleep 1
-fi
+# Function to link config files
+link_config_files() {
+    print_action "Linking configuration files..."
 
-
-### link Config Files ###
-printf " linking config files...\n"
-if [[ ! -d $HOME/.config ]]; then
+    # Ensure .config directory exists
     mkdir -p $HOME/.config
-fi
 
-ln -sf $CloneDir/dotconfig/neofetch $HOME/.config/
-ln -sf $CloneDir/dotconfig/sxhkd $HOME/.config/
-ln -sf $CloneDir/dotconfig/betterlockscreen $HOME/.config/
-ln -sf $CloneDir/dotconfig/dunst $HOME/.config/
-ln -sf $CloneDir/dotconfig/kitty $HOME/.config/
-ln -sf $CloneDir/dotconfig/picom $HOME/.config/
-ln -sf $CloneDir/dotconfig/.Xresources $HOME/.Xresources
-#cp -R  dotconfig/Code $HOME/.config/
-sudo cp -R dotconfig/doas.conf /etc/doas.conf
+    # Link various config files
+    ln -sf $CloneDir/dotconfig/neofetch $HOME/.config/
+    ln -sf $CloneDir/dotconfig/sxhkd $HOME/.config/
+    ln -sf $CloneDir/dotconfig/betterlockscreen $HOME/.config/
+    ln -sf $CloneDir/dotconfig/dunst $HOME/.config/
+    ln -sf $CloneDir/dotconfig/kitty $HOME/.config/
+    ln -sf $CloneDir/dotconfig/picom $HOME/.config/
+    ln -sf $CloneDir/dotconfig/.Xresources $HOME/.Xresources
+    sudo cp -R $CloneDir/dotconfig/doas.conf /etc/doas.conf
 
-# config for tmux
-if [[ ! -d $HOME/.config/tmux ]]; then
+    # Configure tmux
     mkdir -p $HOME/.config/tmux
-fi
+    ln -sf $CloneDir/dotconfig/tmux/tmux.conf $HOME/.config/tmux/tmux.conf
+    ln -sf $CloneDir/dotconfig/tmux/tmux.reset.conf $HOME/.config/tmux/tmux.reset.conf
 
-ln -sf $CloneDir/dotconfig/tmux/tmux.conf $HOME/.config/tmux/tmux.conf
-ln -sf $CloneDir/dotconfig/tmux/tmux.reset.conf $HOME/.config/tmux/tmux.reset.conf
+    # Ensure tmux plugin manager is installed
+    if [[ ! -d $HOME/.tmux/plugins/tpm ]]; then
+        git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    fi
 
-sleep 1
+    print_success "Configuration files linked successfully."
+}
 
-if [[ ! -d $HOME/.tmux/plugins/tpm ]]; then
-    git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-fi
+# Function to set up fonts, themes, and icons
+setup_fonts_themes_icons() {
+    print_action "Setting up fonts, themes, and icons..."
 
-
-# autostart for dwm
-if [[ ! -d $HOME/.local/share/dwm ]]; then
-    mkdir -p $HOME/.local/share/dwm
-fi
-ln -sf $CloneDir/dotconfig/autostart.sh $HOME/.local/share/dwm/autostart.sh
-
-
-### Add Fonts ###
-if [[ ! -d $HOME/.local/share/fonts ]]; then
+    # Ensure necessary directories exist
     mkdir -p $HOME/.local/share/fonts
-fi
-
-if [[ ! -d /usr/share/fonts ]]; then
-    sudo mkdir -p /usr/share/fonts
-fi
-cp -R Source/fonts/* $HOME/.local/share/fonts/
-sudo cp -R Source/fonts/* /usr/share/fonts/
-
-# Reloading Font
-fc-cache -vf && sudo fc-cache -vf
-
-
-### Add themes ###
-if [[ ! -d $HOME/.themes ]]; then
-    mkdir -p $HOME/.themes
-fi
-
-if [[ ! -d /usr/share/themes ]]; then
+    mkdir -p /usr/share/fonts
     sudo mkdir -p /usr/share/themes
-fi
-cp -R Source/themes/* $HOME/.themes/
-sudo cp -R Source/themes/* /usr/share/themes/
-
-
-### Add icons ###
-if [[ ! -d $HOME/.icons ]]; then
-    mkdir -p $HOME/.icons
-fi
-
-if [[ ! -d /usr/share/icons ]]; then
     sudo mkdir -p /usr/share/icons
-fi
-cp -R Source/icons/* $HOME/.icons/
-sudo cp -R Source/icons/* /usr/share/icons/
 
+    # Copy fonts, themes, and icons
+    cp -R Source/fonts/* $HOME/.local/share/fonts/
+    sudo cp -R Source/fonts/* /usr/share/fonts/
+    sudo cp -R Source/themes/* /usr/share/themes/
+    sudo cp -R Source/icons/* /usr/share/icons/
 
-### for vscode ###
-#if [[ ! -d $HOME/.vscode ]]; then
-#    mkdir -p $HOME/.vscode
-#fi
-#cp -R Source/code/* $HOME/.vscode
+    # Reload fonts
+    fc-cache -vf && sudo fc-cache -vf
 
+    print_success "Fonts, themes, and icons set up successfully."
+}
 
-### check if src folder exists ###
-if [[ ! -d $HOME/src ]]; then
-    mkdir -p $HOME/src
-fi
-
-### Clone suckless's ###
-if [[ ! -d $HOME/src/suckless ]]; then
-     cd $HOME/src && git clone https://github.com/yousseffjel/suckless.git 
-fi
-
-cd ~/src/suckless/dwm;sudo rm -f config.h;make;sudo make install clean
-cd ~/src/suckless/dmenu;sudo rm -f config.h;make;sudo make install clean
-cd ~/src/suckless/slstatus;sudo rm -f config.h;make;sudo make install clean
-
-
-### clone bin repo ###
-if [[ ! -d $HOME/src/bin ]]; then
-     cd $HOME/src && git clone https://github.com/yousseffjel/bin.git 
-fi
-
-# ------------------------------------------------------
-# Install wallpapers
-# ------------------------------------------------------
-echo -e "${GREEN}"
-figlet "Wallpapers"
-echo -e "${NONE}"
-if [ ! -d ~/src/wallpaper ]; then
-    echo "Do you want to download the wallpapers from repository https://github.com/yousseffjel/wallpaper ?"
-    echo ""
-    if gum confirm "Do you want to download the repository?" ;then
-        cd $HOME/src && git clone https://github.com/yousseffjel/wallpaper.git
-        echo "Wallpapers from the repository installed successfully."
+# Function to optionally install Bluetooth packages
+install_bluetooth() {
+    read -n1 -rep "${CAT} OPTIONAL - Would you like to install Bluetooth packages? (y/n)" BLUETOOTH
+    if [[ $BLUETOOTH =~ ^[Yy]$ ]]; then
+        print_action "Installing Bluetooth Packages..."
+        blue_pkgs="bluez bluez-utils blueman"
+        if ! yay -S --noconfirm $blue_pkgs 2>&1 | tee -a $LOG; then
+            print_error "Failed to install Bluetooth packages. Please check the install.log."
+        else
+            sudo systemctl enable bluetooth.service
+            sudo systemctl start bluetooth.service
+            if systemctl is-active bluetooth.service; then
+                print_success "Bluetooth service enabled and running."
+            else
+                print_error "Bluetooth service failed to start."
+            fi
+        fi
+    else
+        print_note "Bluetooth packages installation skipped."
     fi
-else
-    echo ":: ~/src/wallpaper folder already exists."
-fi
-echo ""
+}
 
-### Enable ly  ###
-printf " Enable ly"
-sudo systemctl enable ly.service
+# Function to set up power management
+setup_power_management() {
+    sudo systemctl enable tlp.service
+    sudo systemctl start tlp.service
 
-
-# XSessions and dwm.desktop
-if [[ ! -d /usr/share/xsessions ]]; then
-    sudo mkdir -p /usr/share/xsessions
-fi
-
-sudo cp -R $CloneDir/dotconfig/dwm.desktop /usr/share/xsessions/dwm.desktop
-
-### fix open kitty from thunar ###
-if [[ ! -d $HOME/.config/xfce4 ]]; then
-    mkdir -p $HOME/.config/xfce4
-fi
-ln -sf $CloneDir/dotconfig/helpers.rc ~/.config/xfce4/helpers.rc
-
-# BLUETOOTH
-read -n1 -rep "${CAT} OPTIONAL - Would you like to install Bluetooth packages? (y/n)" BLUETOOTH
-if [[ $BLUETOOTH =~ ^[Yy]$ ]]; then
-    printf " Installing Bluetooth Packages...\n"
- blue_pkgs="bluez bluez-utils blueman"
-    if ! yay -S --noconfirm $blue_pkgs 2>&1 | tee -a $LOG; then
-       	print_error "Failed to install bluetooth packages - please check the install.log"    
-    printf " Activating Bluetooth Services...\n"
-    sudo systemctl enable bluetooth.service
-    sleep 2
+    # Optionally install Auto-CPUFreq
+    read -n1 -rep "${CAT} OPTIONAL - Would you like to install Auto-CPUFreq? (y/n)" CPUFREQ
+    if [[ $CPUFREQ =~ ^[Yy]$ ]]; then
+        print_action "Installing Auto-CPUFreq..."
+        yay -S --noconfirm auto-cpufreq 2>&1 | tee -a $LOG
+        sudo systemctl enable --now auto-cpufreq.service
+        print_success "Auto-CPUFreq installed and enabled."
+    else
+        print_note "Auto-CPUFreq installation skipped."
     fi
-else
-    printf "${YELLOW} No bluetooth packages installed..\n"
-	fi
+}
 
-#### Enable some servises ####
-# apps for power manager 
-sudo systemctl enable tlp.service
-sleep 1
-sudo systemctl start tlp.service
-sleep 2
+# Function to finalize the setup
+finalize_setup() {
+    sudo systemctl enable --now betterlockscreen@$USER
+    betterlockscreen -u ~/src/wallpaper/cat_lofi_cafe.jpg --blur
 
-#sudo systemctl enable --now auto-cpufreq.service
+    # Fix Xorg log ownership issues
+    sudo chown $USER: ~/.local/share/*
+    sudo chown $USER: ~/.local/*
 
-# betterlockscreen
-sudo systemctl enable --now betterlockscreen@$USER
+    print_success "Setup completed successfully."
+}
 
-# set wallpaper for betterlockscreen
-betterlockscreen -u ~/src/wallpaper/cat_lofi_cafe.jpg --blur
+# Function to prompt for system reboot
+prompt_reboot() {
+    print_note "It's recommended to reboot your system to apply all changes."
+    read -n1 -rep "${CAT} Would you like to reboot now? (y/n)" REBOOT
+    if [[ $REBOOT =~ ^[Yy]$ ]]; then
+        print_success "Rebooting now..."
+        sudo reboot
+    else
+        print_note "Please remember to reboot your system later."
+    fi
+}
 
-# fix Xorg-log
-sudo chown yusuf: ~/.local/share/*
-sudo chown yusuf: ~/.local/*
+### Main Script Execution ###
 
-### Script is done ###
-printf "\n${GREEN} Installation Completed.\n"
-printf "\e[1;32myou can now reboot.\e[0m\n"
+# Welcome message
+print_success "Welcome to the Arch Linux YAY DWM installer!"
+
+# Run functions in order
+update_system
+check_and_install_yay
+install_packages
+link_config_files
+setup_fonts_themes_icons
+install_bluetooth
+setup_power_management
+finalize_setup
+prompt_reboot
