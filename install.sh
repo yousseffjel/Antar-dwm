@@ -170,7 +170,7 @@ install_packages() {
         # X11 utilities
         xorg-xinit xorg-xrandr xorg-xsetroot xorg-xset xorg-xrdb
         # Development tools
-        rust cargo nodejs npm
+        rust
         # Essential fonts: JetBrains Mono Nerd Font (global font for all applications)
         ttf-jetbrains-mono-nerd
         # Essential icons (3 themes)
