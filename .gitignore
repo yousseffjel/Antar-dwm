@@ -1,0 +1,39 @@
+# Installation logs
+install.log
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+yay/
+*.pkg.tar.zst
+*.pkg.tar.xz
+
+# User-specific files that shouldn't be tracked
+dotconfig/.Xresources.local
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Vim swap files
+*.swp
+*.swo
+
+# Editor directories
+.vscode/
+.idea/
+
+# Cache directories
+.cache/
+*.cache
+
