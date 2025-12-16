@@ -78,9 +78,24 @@ check_sudo() {
     fi
 }
 
+# Function to check if pacman database is locked
+check_pacman_lock() {
+    if [[ -f /var/lib/pacman/db.lck ]]; then
+        print_error "Pacman database is locked!"
+        print_note "Another package manager process is likely running."
+        print_note "Please wait for it to finish, or if you're sure nothing is running, remove the lock:"
+        print_note "  sudo rm /var/lib/pacman/db.lck"
+        print_note ""
+        print_note "To check for running pacman processes:"
+        print_note "  ps aux | grep -E 'pacman|yay'"
+        exit 1
+    fi
+}
+
 # Function to update the system and install Reflector for faster mirrors
 update_system() {
     check_sudo
+    check_pacman_lock
     print_note "Updating the system and optimizing mirrors..."
     run $SUDO_CMD pacman -S --noconfirm reflector
     
@@ -175,6 +190,7 @@ install_packages() {
         st
     )
 
+    check_pacman_lock
     print_action "Installing official repository packages..."
     # NOTE: Official repo packages are critical - exit on failure
     # AUR packages may fail due to availability issues, so we continue on failure
@@ -183,6 +199,7 @@ install_packages() {
         exit 1
     fi
     
+    check_pacman_lock
     print_action "Installing AUR packages..."
     # NOTE: AUR packages may fail due to:
     # - Package no longer available
