@@ -129,14 +129,29 @@ install_packages() {
     # Official repo packages (install with pacman first for reliability)
     local repo_pkgs=(
         base-devel libx11 libxft libxinerama freetype2 xorg-server
-        sxhkd polkit-gnome ly thunar xcolor feh picom unzip unrar wget
+        sxhkd polkit-gnome ly thunar xcolor feh picom wget
         vim neovim tmux lxappearance network-manager-applet
         gvfs cpupower satty dunst libnotify xclip
-        brightnessctl pamixer pavucontrol
-        htop xdg-user-dirs pacman-contrib
+        brightnessctl htop xdg-user-dirs pacman-contrib
         opendoas tar xsel
         curl tree binutils coreutils fuse2
-        # Note: st (simple terminal) is installed from AUR, not alacritty
+        # Terminal: alacritty (main), st (secondary - from AUR)
+        alacritty
+        # File manager and archive support
+        thunar-archive-plugin tumbler file-roller
+        # Archive extraction tools (full support)
+        unzip unrar p7zip zip
+        # Audio system: PipeWire (modern replacement for PulseAudio)
+        pipewire pipewire-pulse pipewire-alsa pipewire-jack wireplumber
+        pamixer pavucontrol alsa-utils
+        # Media control
+        playerctl
+        # Applications referenced in keybindings
+        firefox copyq
+        # Network management
+        networkmanager
+        # X11 utilities
+        xorg-xinit xorg-xrandr xorg-xsetroot xorg-xset xorg-xrdb
         # Development tools
         rust cargo nodejs npm
         # Essential fonts: JetBrains Mono Nerd Font (global font for all applications)
@@ -156,7 +171,7 @@ install_packages() {
         tela-circle-icon-theme-dracula
         # Essential GTK themes
         catppuccin-gtk-theme-mocha catppuccin-gtk-theme-frappe
-        # Simple terminal (st) from suckless
+        # Simple terminal (st) from suckless - secondary terminal
         st
     )
 
@@ -382,6 +397,10 @@ link_config_files() {
     # Create Screenshots directory (used by sxhkdrc)
     mkdir -p "$HOME/Pictures/Screenshots"
     print_success "Screenshots directory created"
+    
+    # Create mount point directory (used by mount scripts)
+    mkdir -p "$HOME/mnt"
+    print_success "Mount point directory created"
 
     print_success "Configuration files linked successfully."
 }
@@ -556,6 +575,65 @@ EOF
     print_note "CPU governor set to 'performance', USB autosuspend disabled, PCIe ASPM set to performance."
 }
 
+# Function to enable system services and configure user groups
+enable_services_and_groups() {
+    print_action "Enabling system services and configuring user groups..."
+    
+    # Enable NetworkManager
+    if command -v NetworkManager &> /dev/null; then
+        run $SUDO_CMD systemctl enable NetworkManager.service
+        run $SUDO_CMD systemctl start NetworkManager.service
+        print_success "NetworkManager enabled and started"
+    else
+        print_note "NetworkManager not found. Skipping..."
+    fi
+    
+    # Enable display manager (ly)
+    if command -v ly &> /dev/null; then
+        run $SUDO_CMD systemctl enable ly.service
+        print_success "Display manager (ly) enabled"
+    else
+        print_note "Display manager (ly) not found. Skipping..."
+    fi
+    
+    # Enable PipeWire services (user services)
+    if command -v pipewire &> /dev/null; then
+        print_note "Configuring PipeWire audio system..."
+        # Enable PipeWire user services (wireplumber is the modern session manager)
+        systemctl --user enable pipewire.service pipewire-pulse.service wireplumber.service 2>/dev/null || true
+        print_success "PipeWire services configured (will start on login)"
+        print_note "Note: PipeWire will start automatically when you log in. Audio should work after first login."
+    else
+        print_note "PipeWire not found. Skipping audio service configuration..."
+    fi
+    
+    # Add user to required groups
+    print_action "Adding user to required groups..."
+    local groups_to_add=()
+    
+    # Check which groups user is not in
+    if ! groups "$USERNAME" | grep -q '\baudio\b'; then
+        groups_to_add+=("audio")
+    fi
+    if ! groups "$USERNAME" | grep -q '\bvideo\b'; then
+        groups_to_add+=("video")
+    fi
+    if ! groups "$USERNAME" | grep -q '\binput\b'; then
+        groups_to_add+=("input")
+    fi
+    if ! groups "$USERNAME" | grep -q '\bstorage\b'; then
+        groups_to_add+=("storage")
+    fi
+    
+    if [ ${#groups_to_add[@]} -gt 0 ]; then
+        run $SUDO_CMD usermod -aG "$(IFS=,; echo "${groups_to_add[*]}")" "$USERNAME"
+        print_success "User added to groups: ${groups_to_add[*]}"
+        print_note "Note: You may need to log out and back in (or reboot) for group changes to take effect."
+    else
+        print_success "User already in all required groups"
+    fi
+}
+
 # Function to finalize the setup
 finalize_setup() {
     # Setup betterlockscreen service
@@ -646,6 +724,7 @@ check_and_install_yay
 install_packages
 build_suckless_tools
 link_config_files
+enable_services_and_groups
 install_cursor_extensions
 install_bluetooth
 setup_power_management
