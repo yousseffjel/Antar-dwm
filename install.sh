@@ -152,6 +152,8 @@ install_packages() {
         curl tree binutils coreutils fuse2
         # Terminal: alacritty (main), st (secondary - from AUR)
         alacritty
+        # Shell: fish shell and utilities
+        fish fzf bat eza pv
         # File manager and archive support
         thunar-archive-plugin tumbler file-roller
         # Archive extraction tools (full support)
@@ -404,6 +406,25 @@ link_config_files() {
         ln -sf "$CloneDir/dotconfig/helpers.rc" "$HOME/.config/helpers.rc" 2>/dev/null || true
     fi
 
+    # Link alacritty config
+    if [[ -d "$CloneDir/dotconfig/alacritty" ]]; then
+        ln -sf "$CloneDir/dotconfig/alacritty" "$HOME/.config/"
+        print_success "Alacritty config linked"
+    fi
+
+    # Link git config
+    if [[ -f "$CloneDir/dotconfig/git/config" ]]; then
+        mkdir -p "$HOME/.config/git"
+        ln -sf "$CloneDir/dotconfig/git/config" "$HOME/.config/git/config"
+        print_success "Git config linked"
+    fi
+
+    # Link nvim config
+    if [[ -d "$CloneDir/dotconfig/nvim" ]]; then
+        ln -sf "$CloneDir/dotconfig/nvim" "$HOME/.config/"
+        print_success "Neovim config linked"
+    fi
+
     # Install dwm.desktop for display manager
     if [[ -f "$CloneDir/dotconfig/dwm.desktop" ]]; then
         run $SUDO_CMD mkdir -p /usr/share/xsessions
@@ -651,6 +672,41 @@ enable_services_and_groups() {
     fi
 }
 
+# Function to install Fish shell configuration
+install_fish_config() {
+    print_action "Installing Fish shell configuration..."
+    
+    # Check if fish project directory exists
+    FISH_DIR=""
+    if [[ -d "$CloneDir/../fish" ]]; then
+        FISH_DIR="$CloneDir/../fish"
+    elif [[ -d "$HOME/dev/fish" ]]; then
+        FISH_DIR="$HOME/dev/fish"
+    else
+        print_note "Fish project directory not found. Expected at: $CloneDir/../fish or $HOME/dev/fish"
+        print_note "Skipping Fish configuration installation."
+        return 0
+    fi
+    
+    print_note "Found fish directory at: $FISH_DIR"
+    
+    # Check if fish install script exists
+    if [[ ! -f "$FISH_DIR/install.sh" ]]; then
+        print_error "Fish install script not found at $FISH_DIR/install.sh"
+        return 1
+    fi
+    
+    # Run fish install script with --no-packages (we already installed fish)
+    # and --no-chsh (let user decide if they want to change shell)
+    print_note "Running Fish configuration installer..."
+    if run_pipe "bash \"$FISH_DIR/install.sh\" --no-packages --no-chsh 2>&1 | tee -a \"$LOG\""; then
+        print_success "Fish configuration installed successfully."
+    else
+        print_error "Fish configuration installation failed. Check install.log for details."
+        print_note "You can run the fish install script manually: $FISH_DIR/install.sh"
+    fi
+}
+
 # Function to finalize the setup
 finalize_setup() {
     # Setup betterlockscreen service
@@ -741,6 +797,7 @@ check_and_install_yay
 install_packages
 build_suckless_tools
 link_config_files
+install_fish_config
 enable_services_and_groups
 install_cursor_extensions
 install_bluetooth
