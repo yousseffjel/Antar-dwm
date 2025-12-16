@@ -5,16 +5,51 @@ GREEN="$(tput setaf 2)[OK]$(tput sgr0)"
 RED="$(tput setaf 1)[ERROR]$(tput sgr0)"
 YELLOW="$(tput setaf 3)[NOTE]$(tput sgr0)"
 CAT="$(tput setaf 6)[ACTION]$(tput sgr0)"
+NC="$(tput sgr0)"
 LOG="install.log"
-CloneDir=$(pwd)
+# Get the directory where the script is located, not where it's run from
+CloneDir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+USERNAME=$(whoami)
+
+# DRY-RUN mode support
+DRY_RUN=false
+[[ "$1" == "--dry-run" ]] && DRY_RUN=true
+
+# Helper function to run commands (respects DRY_RUN)
+run() {
+    if $DRY_RUN; then
+        print_note "[DRY-RUN] Would execute: $*"
+        return 0
+    else
+        "$@"
+    fi
+}
+
+# Helper function to run piped commands (respects DRY_RUN)
+# Usage: run_pipe "command1 | command2 | command3"
+# SECURITY: Uses bash -c instead of eval to prevent command injection
+run_pipe() {
+    if $DRY_RUN; then
+        print_note "[DRY-RUN] Would execute pipeline: $*"
+        return 0
+    else
+        # Use bash -c with proper quoting to avoid eval security issues
+        bash -c "$*"
+    fi
+}
 
 # Set the script to exit on error and log failures
 set -e 
-trap 'echo -e "${RED}Script failed. Check $LOG for more details.${NONE}"' ERR
+set -o pipefail  # Exit on pipe failures
+trap 'echo -e "\033[0;31m[ERROR] Script failed. Check install.log for more details.\033[0m"' ERR
+
+# Track temp directories for cleanup
+TEMP_DIRS=()
+trap 'for dir in "${TEMP_DIRS[@]}"; do [[ -d "$dir" ]] && rm -rf "$dir" 2>/dev/null || true; done' EXIT
 
 # Utility functions for printing messages
 print_error() {
-    printf " %s%s\n" "$RED" "$1" "$NC" >&2
+    printf "%s%s%s\n" "$RED" "$1" "$NC" >&2
 }
 
 print_success() {
@@ -29,13 +64,31 @@ print_action() {
     printf "%s%s%s\n" "$CAT" "$1" "$NC"
 }
 
+# Function to check if sudo/doas is available and set SUDO_CMD
+check_sudo() {
+    if ! command -v sudo &> /dev/null && ! command -v doas &> /dev/null; then
+        print_error "Neither sudo nor doas is available. Please install one of them first."
+        exit 1
+    fi
+    # Use doas if available, otherwise sudo
+    if command -v doas &> /dev/null; then
+        SUDO_CMD="doas"
+    else
+        SUDO_CMD="sudo"
+    fi
+}
+
 # Function to update the system and install Reflector for faster mirrors
 update_system() {
+    check_sudo
     print_note "Updating the system and optimizing mirrors..."
-    sudo pacman -S --noconfirm reflector
-    sudo reflector --verbose --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
-    sudo pacman -Syyu --noconfirm
-    sudo pacman -Fy
+    run $SUDO_CMD pacman -S --noconfirm reflector
+    
+    print_note "This will overwrite /etc/pacman.d/mirrorlist with optimized mirrors."
+    run $SUDO_CMD reflector --verbose --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
+    
+    run $SUDO_CMD pacman -Syu --noconfirm
+    run $SUDO_CMD pacman -Fy
 }
 
 # Function to check if yay is installed, and install it if not
@@ -44,30 +97,197 @@ check_and_install_yay() {
         print_success "yay is already installed."
     else 
         print_note "yay not found. Installing yay..."
-        sudo pacman -S --noconfirm git base-devel
-        git clone https://aur.archlinux.org/yay.git
-        cd yay
-        makepkg -si --noconfirm 2>&1 | tee -a $LOG
-        cd ..
+        run $SUDO_CMD pacman -S --noconfirm git base-devel
+        TMPDIR=$(mktemp -d)
+        TEMP_DIRS+=("$TMPDIR")
+        
+        if ! git clone https://aur.archlinux.org/yay.git "$TMPDIR/yay"; then
+            print_error "Failed to clone yay repository. Please check your internet connection."
+            exit 1
+        fi
+        
+        cd "$TMPDIR/yay"
+        # makepkg -si uses sudo internally, so we don't need $SUDO_CMD here
+        if ! run_pipe "makepkg -si --noconfirm 2>&1 | tee -a \"$CloneDir/$LOG\""; then
+            print_error "Failed to build/install yay. Please check the install.log."
+            exit 1
+        fi
+        cd "$CloneDir"
         print_success "yay installed successfully."
     fi
 }
 
 # Function to install a list of packages using yay
 install_packages() {
-    base_pkgs="base-devel libx11 libxft libxinerama freetype2 xorg"
-    app_pkgs="sxhkd polkit-kde-agent ly thunar xcolor feh picom unzip unrar wget vim tmux lxappearance betterlockscreen vscodium-bin network-manager-applet gvfs jq tlp tlpui auto-cpufreq"
-    app_pkgs2="neofetch flameshot dunst ffmpeg xclip gparted mpv playerctl brightnessctl pamixer pavucontrol ffmpegthumbnailer tumbler thunar-archive-plugin htop xdg-user-dirs pacman-contrib"
-    app_pkgs3="timeshift telegram-desktop figlet opendoas dust thorium-browser-bin trash-cli zsync tar xsel sed grep curl nodejs npm cargo tree lazygit binutils coreutils fuse python-pip xkblayout-state-git brightness"
-    font_pkgs="ttf-joypixels ttf-font-awesome noto-fonts-emoji"
+    # Optional AUR packages (may not be available)
+    local optional_pkgs=(
+        stremio freedownloadmanager
+        gruvbox-dark-gtk
+    )
 
-    print_action "Installing packages..."
-    if ! yay -S --noconfirm $base_pkgs $app_pkgs $app_pkgs2 $app_pkgs3 $font_pkgs 2>&1 | tee -a $LOG; then
-        print_error "Failed to install additional packages. Please check the install.log."
+    # Separate official repo packages from AUR packages
+    # Official repo packages (install with pacman first for reliability)
+    local repo_pkgs=(
+        base-devel libx11 libxft libxinerama freetype2 xorg-server
+        sxhkd polkit-gnome ly thunar xcolor feh picom unzip unrar wget
+        vim neovim tmux lxappearance network-manager-applet
+        gvfs cpupower satty dunst libnotify xclip
+        brightnessctl pamixer pavucontrol
+        htop xdg-user-dirs pacman-contrib
+        opendoas tar xsel
+        curl tree binutils coreutils fuse2
+        # Note: st (simple terminal) is installed from AUR, not alacritty
+        # Development tools
+        rust cargo nodejs npm
+        # Essential fonts: JetBrains Mono Nerd Font (global font for all applications)
+        ttf-jetbrains-mono-nerd
+        # Essential icons (3 themes)
+        papirus-icon-theme adwaita-icon-theme
+        # Essential themes (will add AUR themes separately)
+    )
+    
+    # AUR packages (install with yay)
+    local aur_pkgs=(
+        cursor-bin betterlockscreen
+        xkblayout-state-git
+        # Cursor theme
+        bibata-cursor-theme
+        # Essential icon theme
+        tela-circle-icon-theme-dracula
+        # Essential GTK themes
+        catppuccin-gtk-theme-mocha catppuccin-gtk-theme-frappe
+        # Simple terminal (st) from suckless
+        st
+    )
+
+    print_action "Installing official repository packages..."
+    # NOTE: Official repo packages are critical - exit on failure
+    # AUR packages may fail due to availability issues, so we continue on failure
+    if ! run_pipe "$SUDO_CMD pacman -S --noconfirm --needed \"${repo_pkgs[@]}\" 2>&1 | tee -a \"$LOG\""; then
+        print_error "Failed to install official packages. Please check the install.log."
         exit 1
     fi
-    xdg-user-dirs-update
+    
+    print_action "Installing AUR packages..."
+    # NOTE: AUR packages may fail due to:
+    # - Package no longer available
+    # - Build failures
+    # - Network issues
+    # We continue installation even if some AUR packages fail, as they're often optional
+    if ! run_pipe "yay -S --noconfirm --needed --disable-download-timeout \"${aur_pkgs[@]}\" 2>&1 | tee -a \"$LOG\""; then
+        print_error "Some AUR packages failed to install. Continuing..."
+    fi
+    
+    # Try to install optional AUR packages (may fail if not available)
+    print_action "Installing optional AUR packages..."
+    for pkg in "${optional_pkgs[@]}"; do
+        set +e  # Temporarily disable exit on error
+        if run_pipe "yay -S --noconfirm \"$pkg\" 2>&1 | tee -a \"$LOG\""; then
+            print_success "$pkg installed successfully."
+        else
+            print_note "$pkg not available or installation failed. You can try installing manually later."
+        fi
+        set -e  # Re-enable exit on error
+    done
+    
+    # Update font cache
+    print_note "Updating font cache..."
+    run_pipe "fc-cache -vf 2>&1 | tee -a \"$LOG\"" || print_note "User font cache update had issues (continuing)..."
+    run_pipe "$SUDO_CMD fc-cache -vf 2>&1 | tee -a \"$LOG\"" || print_note "System font cache update had issues (continuing)..."
+    
+    print_note "Updating user directories..."
+    run_pipe "xdg-user-dirs-update 2>&1 | tee -a \"$LOG\"" || print_note "xdg-user-dirs-update had issues (continuing)..."
     print_success "All packages installed successfully."
+}
+
+# Function to build and install suckless tools (dwm, dmenu, slstatus)
+build_suckless_tools() {
+    print_action "Building and installing suckless tools..."
+    
+    # Check if suckless directory exists (should be in parent directory)
+    SUCKLESS_DIR=""
+    if [[ -d "$CloneDir/../suckless" ]]; then
+        SUCKLESS_DIR="$CloneDir/../suckless"
+    elif [[ -d "$HOME/dev/suckless" ]]; then
+        SUCKLESS_DIR="$HOME/dev/suckless"
+    else
+        print_error "Suckless directory not found. Expected at: $CloneDir/../suckless or $HOME/dev/suckless"
+        print_note "Please ensure the suckless project is cloned in the correct location."
+        return 1
+    fi
+    
+    print_note "Found suckless directory at: $SUCKLESS_DIR"
+    
+    # Build and install dwm
+    if [[ -d "$SUCKLESS_DIR/dwm" ]]; then
+        print_action "Building dwm..."
+        cd "$SUCKLESS_DIR/dwm"
+        # Regenerate config.h from config.def.h if needed
+        if [[ ! -f config.h ]] || [[ config.def.h -nt config.h ]]; then
+            cp config.def.h config.h
+            print_note "Regenerated dwm config.h from config.def.h"
+        fi
+        if make clean && make; then
+            run $SUDO_CMD make install
+            print_success "dwm built and installed successfully."
+        else
+            print_error "Failed to build dwm. Check the output above for errors."
+            cd "$CloneDir"
+            return 1
+        fi
+        cd "$CloneDir"
+    else
+        print_error "dwm directory not found in $SUCKLESS_DIR"
+        return 1
+    fi
+    
+    # Build and install dmenu
+    if [[ -d "$SUCKLESS_DIR/dmenu" ]]; then
+        print_action "Building dmenu..."
+        cd "$SUCKLESS_DIR/dmenu"
+        # Regenerate config.h from config.def.h if needed
+        if [[ ! -f config.h ]] || [[ config.def.h -nt config.h ]]; then
+            cp config.def.h config.h
+            print_note "Regenerated dmenu config.h from config.def.h"
+        fi
+        if make clean && make; then
+            run $SUDO_CMD make install
+            print_success "dmenu built and installed successfully."
+        else
+            print_error "Failed to build dmenu. Check the output above for errors."
+            cd "$CloneDir"
+            return 1
+        fi
+        cd "$CloneDir"
+    else
+        print_error "dmenu directory not found in $SUCKLESS_DIR"
+        return 1
+    fi
+    
+    # Build and install slstatus
+    if [[ -d "$SUCKLESS_DIR/slstatus" ]]; then
+        print_action "Building slstatus..."
+        cd "$SUCKLESS_DIR/slstatus"
+        # Regenerate config.h from config.def.h if needed
+        if [[ ! -f config.h ]] || [[ config.def.h -nt config.h ]]; then
+            cp config.def.h config.h
+            print_note "Regenerated slstatus config.h from config.def.h"
+        fi
+        if make clean && make; then
+            run $SUDO_CMD make install
+            print_success "slstatus built and installed successfully."
+        else
+            print_error "Failed to build slstatus. Check the output above for errors."
+            cd "$CloneDir"
+            return 1
+        fi
+        cd "$CloneDir"
+    else
+        print_error "slstatus directory not found in $SUCKLESS_DIR"
+        return 1
+    fi
+    
+    print_success "All suckless tools built and installed successfully."
 }
 
 # Function to link config files
@@ -75,64 +295,167 @@ link_config_files() {
     print_action "Linking configuration files..."
 
     # Ensure .config directory exists
-    mkdir -p $HOME/.config
+    mkdir -p "$HOME/.config"
 
     # Link various config files
-    ln -sf $CloneDir/dotconfig/neofetch $HOME/.config/
-    ln -sf $CloneDir/dotconfig/sxhkd $HOME/.config/
-    ln -sf $CloneDir/dotconfig/betterlockscreen $HOME/.config/
-    ln -sf $CloneDir/dotconfig/dunst $HOME/.config/
-    ln -sf $CloneDir/dotconfig/kitty $HOME/.config/
-    ln -sf $CloneDir/dotconfig/picom $HOME/.config/
-    ln -sf $CloneDir/dotconfig/.Xresources $HOME/.Xresources
-    sudo cp -R $CloneDir/dotconfig/doas.conf /etc/doas.conf
+    ln -sf "$CloneDir/dotconfig/sxhkd" "$HOME/.config/"
+    ln -sf "$CloneDir/dotconfig/betterlockscreen" "$HOME/.config/"
+    ln -sf "$CloneDir/dotconfig/dunst" "$HOME/.config/"
+    ln -sf "$CloneDir/dotconfig/picom" "$HOME/.config/"
+    
+    # Link Cursor config (if it exists)
+    if [[ -d "$CloneDir/dotconfig/Cursor" ]]; then
+        mkdir -p "$HOME/.config/Cursor/User"
+        ln -sf "$CloneDir/dotconfig/Cursor/User/settings.json" "$HOME/.config/Cursor/User/settings.json" 2>/dev/null || true
+    fi
+    
+    # Link .Xresources if it exists
+    if [[ -f "$CloneDir/dotconfig/.Xresources" ]]; then
+        ln -sf "$CloneDir/dotconfig/.Xresources" "$HOME/.Xresources"
+    fi
+    
+    # Setup doas.conf from template
+    if [[ ! -f /etc/doas.conf ]]; then
+        if [[ -f "$CloneDir/dotconfig/doas.conf" ]]; then
+            # Replace USERNAME placeholder with actual username
+            # Escape special characters in USERNAME for sed
+            ESCAPED_USERNAME=$(printf '%s\n' "$USERNAME" | sed 's/[[\.*^$()+?{|]/\\&/g')
+            sed "s/USERNAME/$ESCAPED_USERNAME/g" "$CloneDir/dotconfig/doas.conf" | run $SUDO_CMD tee /etc/doas.conf > /dev/null
+            print_success "doas.conf configured for user $USERNAME"
+        else
+            # Fallback: create basic config
+            echo "permit persist $USERNAME as root" | run $SUDO_CMD tee /etc/doas.conf > /dev/null
+            print_note "doas.conf created with basic configuration."
+        fi
+    else
+        print_note "doas.conf already exists. Skipping..."
+    fi
 
     # Configure tmux
-    mkdir -p $HOME/.config/tmux
-    ln -sf $CloneDir/dotconfig/tmux/tmux.conf $HOME/.config/tmux/tmux.conf
-    ln -sf $CloneDir/dotconfig/tmux/tmux.reset.conf $HOME/.config/tmux/tmux.reset.conf
+    mkdir -p "$HOME/.config/tmux"
+    ln -sf "$CloneDir/dotconfig/tmux/tmux.conf" "$HOME/.config/tmux/tmux.conf"
+    ln -sf "$CloneDir/dotconfig/tmux/tmux.reset.conf" "$HOME/.config/tmux/tmux.reset.conf"
 
     # Ensure tmux plugin manager is installed
-    if [[ ! -d $HOME/.tmux/plugins/tpm ]]; then
-        git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    if [[ ! -d "$HOME/.tmux/plugins/tpm" ]]; then
+        if ! run_pipe "git clone https://github.com/tmux-plugins/tpm \"$HOME/.tmux/plugins/tpm\" 2>&1 | tee -a \"$LOG\""; then
+            print_note "Failed to clone tmux plugin manager. You can install it manually later."
+        fi
     fi
+
+    # Install helper scripts
+    if [[ -d "$CloneDir/scripts" ]]; then
+        mkdir -p "$HOME/src/bin"
+        # Check if there are any files to copy
+        if ls "$CloneDir/scripts"/* >/dev/null 2>&1; then
+            cp -r "$CloneDir/scripts"/* "$HOME/src/bin/"
+            # Only chmod if .sh files exist
+            if ls "$HOME/src/bin"/*.sh >/dev/null 2>&1; then
+                chmod +x "$HOME/src/bin"/*.sh
+            fi
+            print_success "Helper scripts installed to ~/src/bin/"
+        else
+            print_note "No scripts found in scripts directory. Skipping..."
+        fi
+    fi
+
+    # Link dwm autostart script (for dwm with autostart patch)
+    if [[ -f "$CloneDir/dotconfig/autostart.sh" ]]; then
+        mkdir -p "$HOME/.config/dwm"
+        ln -sf "$CloneDir/dotconfig/autostart.sh" "$HOME/.config/dwm/autostart.sh"
+        chmod +x "$CloneDir/dotconfig/autostart.sh" 2>/dev/null || true
+        print_success "dwm autostart script linked"
+    fi
+
+    # Link helpers.rc (if needed by any application)
+    if [[ -f "$CloneDir/dotconfig/helpers.rc" ]]; then
+        ln -sf "$CloneDir/dotconfig/helpers.rc" "$HOME/.config/helpers.rc" 2>/dev/null || true
+    fi
+
+    # Install dwm.desktop for display manager
+    if [[ -f "$CloneDir/dotconfig/dwm.desktop" ]]; then
+        run $SUDO_CMD mkdir -p /usr/share/xsessions
+        run $SUDO_CMD cp -f "$CloneDir/dotconfig/dwm.desktop" /usr/share/xsessions/dwm.desktop
+        print_success "dwm.desktop installed for display manager"
+    fi
+
+    # Create Screenshots directory (used by sxhkdrc)
+    mkdir -p "$HOME/Pictures/Screenshots"
+    print_success "Screenshots directory created"
 
     print_success "Configuration files linked successfully."
 }
 
-# Function to set up fonts, themes, and icons
-setup_fonts_themes_icons() {
-    print_action "Setting up fonts, themes, and icons..."
+# Function to install Cursor extensions
+install_cursor_extensions() {
+    print_action "Installing Cursor extensions..."
 
-    # Ensure necessary directories exist
-    mkdir -p $HOME/.local/share/fonts
-    mkdir -p /usr/share/fonts
-    sudo mkdir -p /usr/share/themes
-    sudo mkdir -p /usr/share/icons
-
-    # Copy fonts, themes, and icons
-    cp -R Source/fonts/* $HOME/.local/share/fonts/
-    sudo cp -R Source/fonts/* /usr/share/fonts/
-    sudo cp -R Source/themes/* /usr/share/themes/
-    sudo cp -R Source/icons/* /usr/share/icons/
-
-    # Reload fonts
-    fc-cache -vf && sudo fc-cache -vf
-
-    print_success "Fonts, themes, and icons set up successfully."
+    # Check for cursor command (may be cursor or cursor-editor)
+    local cursor_cmd=""
+    if command -v cursor &> /dev/null; then
+        cursor_cmd="cursor"
+    elif command -v cursor-editor &> /dev/null; then
+        cursor_cmd="cursor-editor"
+    else
+        print_note "Cursor not found. Skipping extension installation."
+        print_note "You can install extensions manually after installing Cursor:"
+        print_note "  cursor --install-extension <extension-id>"
+        return
+    fi
+    
+    # List of extensions to install (development-focused extensions)
+    extensions=(
+        "anysphere.cursorpyright"
+        "bradlc.vscode-tailwindcss"
+        "charliermarsh.ruff"
+        "christian-kohler.path-intellisense"
+        "dbaeumer.vscode-eslint"
+        "eamodio.gitlens"
+        "editorconfig.editorconfig"
+        "esbenp.prettier-vscode"
+        "graphql.vscode-graphql"
+        "graphql.vscode-graphql-syntax"
+        "mikestead.dotenv"
+        "ms-azuretools.vscode-containers"
+        "ms-azuretools.vscode-docker"
+        "ms-python.black-formatter"
+        "ms-python.debugpy"
+        "ms-python.python"
+        "redhat.vscode-yaml"
+        "rphlmr.vscode-drizzle-orm"
+        "typescriptteam.native-preview"
+        "usernamehw.errorlens"
+    )
+    
+    print_note "Installing ${#extensions[@]} Cursor extensions..."
+    for ext in "${extensions[@]}"; do
+        print_note "Installing $ext..."
+        run_pipe "$cursor_cmd --install-extension \"$ext\" 2>&1 | tee -a \"$LOG\"" || print_note "Failed to install $ext"
+    done
+    
+    print_success "Cursor extensions installation completed."
 }
 
 # Function to optionally install Bluetooth packages
 install_bluetooth() {
-    read -n1 -rep "${CAT} OPTIONAL - Would you like to install Bluetooth packages? (y/n)" BLUETOOTH
+    # Check if running in interactive terminal
+    if [[ ! -t 0 ]]; then
+        print_note "Not running in interactive terminal. Skipping Bluetooth installation."
+        return
+    fi
+    
+    read -n1 -rep "${CAT} OPTIONAL - Would you like to install Bluetooth packages? (y/n)" BLUETOOTH || {
+        print_note "Input cancelled. Skipping Bluetooth installation."
+        return
+    }
     if [[ $BLUETOOTH =~ ^[Yy]$ ]]; then
         print_action "Installing Bluetooth Packages..."
-        blue_pkgs="bluez bluez-utils blueman"
-        if ! yay -S --noconfirm $blue_pkgs 2>&1 | tee -a $LOG; then
+        local blue_pkgs=(bluez bluez-utils blueman)
+        if ! run_pipe "yay -S --noconfirm --needed \"${blue_pkgs[@]}\" 2>&1 | tee -a \"$LOG\""; then
             print_error "Failed to install Bluetooth packages. Please check the install.log."
         else
-            sudo systemctl enable bluetooth.service
-            sudo systemctl start bluetooth.service
+            run $SUDO_CMD systemctl enable bluetooth.service
+            run $SUDO_CMD systemctl start bluetooth.service
             if systemctl is-active bluetooth.service; then
                 print_success "Bluetooth service enabled and running."
             else
@@ -144,42 +467,159 @@ install_bluetooth() {
     fi
 }
 
-# Function to set up power management
+# Function to set up power management for maximum performance
 setup_power_management() {
-    sudo systemctl enable tlp.service
-    sudo systemctl start tlp.service
-
-    # Optionally install Auto-CPUFreq
-    read -n1 -rep "${CAT} OPTIONAL - Would you like to install Auto-CPUFreq? (y/n)" CPUFREQ
-    if [[ $CPUFREQ =~ ^[Yy]$ ]]; then
-        print_action "Installing Auto-CPUFreq..."
-        yay -S --noconfirm auto-cpufreq 2>&1 | tee -a $LOG
-        sudo systemctl enable --now auto-cpufreq.service
-        print_success "Auto-CPUFreq installed and enabled."
-    else
-        print_note "Auto-CPUFreq installation skipped."
+    # Check if running in interactive terminal
+    if [[ ! -t 0 ]]; then
+        print_note "Not running in interactive terminal. Skipping aggressive performance mode."
+        print_note "You can enable it manually later if needed."
+        return
     fi
+    
+    print_action "Aggressive Performance Mode Configuration"
+    print_note "WARNING: This will configure your system for maximum performance:"
+    print_note "  - CPU governor set to 'performance' (always max speed)"
+    print_note "  - USB autosuspend disabled"
+    print_note "  - PCIe ASPM set to performance"
+    print_note ""
+    print_note "This increases heat, power consumption, and may affect suspend/resume."
+    print_note "Only enable if you have a laptop that's always plugged in with dead battery."
+    echo ""
+    
+    read -n1 -rep "${CAT} Enable aggressive performance mode? (y/n) " PERF_MODE || {
+        print_note "Input cancelled. Skipping performance mode configuration."
+        return
+    }
+    if [[ ! $PERF_MODE =~ ^[Yy]$ ]]; then
+        print_note "Performance mode skipped. System will use default power management."
+        return
+    fi
+    
+    print_action "Configuring system for maximum performance (always plugged in)..."
+    
+    # Set CPU governor to performance mode
+    if command -v cpupower &> /dev/null; then
+        print_note "Setting CPU governor to performance mode..."
+        run_pipe "$SUDO_CMD cpupower frequency-set -g performance 2>&1 | tee -a \"$LOG\"" || print_note "Could not set CPU governor (may need manual configuration)"
+        
+        # Make it persistent by creating a systemd service
+        print_note "Creating systemd service for performance mode..."
+        run $SUDO_CMD tee /etc/systemd/system/cpu-performance.service > /dev/null <<EOF
+[Unit]
+Description=Set CPU governor to performance
+After=multi-user.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/cpupower frequency-set -g performance
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+EOF
+        
+        run $SUDO_CMD systemctl daemon-reload
+        run $SUDO_CMD systemctl enable cpu-performance.service
+        run $SUDO_CMD systemctl start cpu-performance.service
+        
+        print_success "CPU performance mode configured."
+    else
+        print_note "cpupower not found. You may need to set CPU governor manually."
+    fi
+    
+    # Disable power saving features and make them persistent
+    print_note "Disabling power saving features..."
+    
+    # Create modprobe config to disable USB autosuspend
+    if [[ ! -f /etc/modprobe.d/usb-autosuspend.conf ]]; then
+        echo "options usbcore autosuspend=-1" | run $SUDO_CMD tee /etc/modprobe.d/usb-autosuspend.conf > /dev/null
+        print_note "USB autosuspend disabled (persistent)"
+    fi
+    
+    # Create modprobe config for PCIe ASPM performance
+    if [[ ! -f /etc/modprobe.d/pcie-aspm-performance.conf ]]; then
+        echo "options pcie_aspm policy=performance" | run $SUDO_CMD tee /etc/modprobe.d/pcie-aspm-performance.conf > /dev/null
+        print_note "PCIe ASPM set to performance (persistent)"
+    fi
+    
+    # Apply settings immediately (if modules are loaded)
+    if [[ -f /sys/module/usbcore/parameters/autosuspend ]]; then
+        echo -1 | run $SUDO_CMD tee /sys/module/usbcore/parameters/autosuspend > /dev/null 2>&1 || true
+    fi
+    
+    if [[ -f /sys/module/pcie_aspm/parameters/policy ]]; then
+        echo performance | run $SUDO_CMD tee /sys/module/pcie_aspm/parameters/policy > /dev/null 2>&1 || true
+    fi
+    
+    print_success "Power management configured for maximum performance."
+    print_note "Note: This setup is optimized for always-plugged-in usage."
+    print_note "CPU governor set to 'performance', USB autosuspend disabled, PCIe ASPM set to performance."
 }
 
 # Function to finalize the setup
 finalize_setup() {
-    sudo systemctl enable --now betterlockscreen@$USER
-    betterlockscreen -u ~/src/wallpaper/cat_lofi_cafe.jpg --blur
+    # Setup betterlockscreen service
+    # Check if user systemd is available
+    if ! systemctl --user list-unit-files &>/dev/null; then
+        print_note "User systemd not available, skipping betterlockscreen service."
+    elif systemctl --user list-unit-files 2>/dev/null | grep -q betterlockscreen; then
+        systemctl --user enable "betterlockscreen@$USERNAME.service" 2>/dev/null || true
+    fi
+    
+    # Setup wallpaper (optional - check if directory exists)
+    if [[ -d "$HOME/Pictures/Wallpapers" ]] || [[ -d "$HOME/.local/share/wallpapers" ]]; then
+        WALLPAPER_DIR="$HOME/Pictures/Wallpapers"
+        if [[ ! -d "$WALLPAPER_DIR" ]]; then
+            WALLPAPER_DIR="$HOME/.local/share/wallpapers"
+        fi
+        
+        # Find first image file
+        WALLPAPER=$(find "$WALLPAPER_DIR" -type f \( -name "*.jpg" -o -name "*.png" -o -name "*.jpeg" \) | head -n 1)
+        
+        if [[ -n "$WALLPAPER" ]]; then
+            if command -v betterlockscreen &> /dev/null; then
+                print_action "Setting up betterlockscreen wallpaper..."
+                run_pipe "betterlockscreen -u \"$WALLPAPER\" --blur 2>&1 | tee -a \"$LOG\"" || print_note "Could not set wallpaper. You can set it manually later."
+            else
+                print_note "betterlockscreen not found. Skipping wallpaper setup."
+            fi
+        else
+            print_note "No wallpaper found. You can set one later with: betterlockscreen -u <path-to-image>"
+        fi
+    else
+        print_note "Wallpaper directory not found. Create ~/Pictures/Wallpapers and add images, then run: betterlockscreen -u <image>"
+    fi
 
-    # Fix Xorg log ownership issues
-    sudo chown $USER: ~/.local/share/*
-    sudo chown $USER: ~/.local/*
+    # Fix Xorg log ownership issues (safer approach - only specific directories)
+    # Only fix ownership for user-specific directories, not system-managed ones
+    if [[ -d "$HOME/.local/share" ]]; then
+        # Only chown the share directory itself, not recursively through all subdirs
+        run chown -R "$USERNAME:" "$HOME/.local/share" 2>/dev/null || true
+    fi
+    if [[ -d "$HOME/.cache" ]]; then
+        run chown -R "$USERNAME:" "$HOME/.cache" 2>/dev/null || true
+    fi
 
     print_success "Setup completed successfully."
 }
 
 # Function to prompt for system reboot
 prompt_reboot() {
+    # Check if running in interactive terminal
+    if [[ ! -t 0 ]]; then
+        print_note "Not running in interactive terminal. Skipping reboot prompt."
+        print_note "Please remember to reboot your system later."
+        return
+    fi
+    
     print_note "It's recommended to reboot your system to apply all changes."
-    read -n1 -rep "${CAT} Would you like to reboot now? (y/n)" REBOOT
+    read -n1 -rep "${CAT} Would you like to reboot now? (y/n)" REBOOT || {
+        print_note "Input cancelled. Please remember to reboot your system later."
+        return
+    }
     if [[ $REBOOT =~ ^[Yy]$ ]]; then
         print_success "Rebooting now..."
-        sudo reboot
+        run $SUDO_CMD reboot
     else
         print_note "Please remember to reboot your system later."
     fi
@@ -189,13 +629,24 @@ prompt_reboot() {
 
 # Welcome message
 print_success "Welcome to the Arch Linux YAY DWM installer!"
+if $DRY_RUN; then
+    print_note "*** DRY-RUN MODE: No changes will be made ***"
+    echo ""
+fi
+print_note "Note: This script will build and install dwm, dmenu, and slstatus from the suckless project."
+print_note "Make sure the suckless project is cloned in the correct location (../suckless or ~/dev/suckless)."
+echo ""
+
+# Check for sudo/doas first
+check_sudo
 
 # Run functions in order
 update_system
 check_and_install_yay
 install_packages
+build_suckless_tools
 link_config_files
-setup_fonts_themes_icons
+install_cursor_extensions
 install_bluetooth
 setup_power_management
 finalize_setup
