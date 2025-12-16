@@ -4,13 +4,13 @@ super + shift + Escape
 
 # Run apps
 super + b
-	thorium-browser
+	firefox
 
 super + e
 	thunar
 
 super + v 
-	code
+	cursor
 
 super + alt + b
 	blueman-manager
@@ -21,33 +21,36 @@ super + alt + b
 
 # Power key
 super + shift + x
-	~/src/bin/logout.sh
+	{ [ -f "$HOME/src/bin/logout.sh" ] && "$HOME/src/bin/logout.sh"; } || { CHOICE=$(dmenu -p "Power:" <<< "Logout
+Reboot
+Shutdown"); case "$CHOICE" in Logout) pkill -TERM dwm;; Reboot) systemctl reboot;; Shutdown) systemctl poweroff;; *) exit 0;; esac; }
 
 super + shift + l 
 	 betterlockscreen -l
 
 # key for mount & umount 
 super + alt + m
-  ~/src/bin/mountmenu.sh
+  { [ -f ~/src/bin/mountmenu.sh ] && ~/src/bin/mountmenu.sh; } || notify-send "Mount script not found" "Create ~/src/bin/mountmenu.sh"
 
 super + alt + u
-  ~/src/bin/umountmenu.sh
+  { [ -f ~/src/bin/umountmenu.sh ] && ~/src/bin/umountmenu.sh; } || notify-send "Umount script not found" "Create ~/src/bin/umountmenu.sh"
 
 # ScreenShot
 super + p
-	flameshot full -p $HOME/win/Users/YuSuf/Pictures/Screenshots/
+	satty --fullscreen --save "$HOME/Pictures/Screenshots/"
 
 super + shift + p
-	flameshot gui -p $HOME/win/Users/YuSuf/Pictures/Screenshots/
+	satty --save "$HOME/Pictures/Screenshots/"
 
 super + alt + p
-	flameshot gui --clipboard
+	satty --clipboard
 
 
 super + shift + c 
  xcolor -s 
 
 # Brightness control
+# Note: 5% increment/decrement provides fine-grained control without being too slow
 XF86MonBrightnessUp
 	brightnessctl set +5%
 
@@ -61,29 +64,30 @@ alt + shift + j
 	brightnessctl set 5%-
 
 # Audio control
+# Note: 5% volume steps provide good balance between precision and speed
 XF86AudioMute
 	pamixer -t # toggle audio mute
 
 XF86AudioMicMute
-	 pamixer --source 54 -t # toggle microphone mute
+	 pamixer --default-source -t # toggle microphone mute
 
 XF86AudioLowerVolume
-	pamixer -d 5 # decrease volume
+	pamixer -d 5 # decrease volume by 5%
 
 XF86AudioRaiseVolume
-	pamixer -i 5 # increase volume
+	pamixer -i 5 # increase volume by 5%
 
 alt + m
 	pamixer -t # toggle audio mute
 
 alt + shift + m 
-	 pamixer --source 54 -t
+	 pamixer --default-source -t # toggle microphone mute
 
 alt + j
-	pamixer -d 5 # decrease volume
+	pamixer -d 5 # decrease volume by 5%
 
 alt + k
-	pamixer -i 5 # increase volume
+	pamixer -i 5 # increase volume by 5%
 
 XF86AudioPlay
 	playerctl play-pause
