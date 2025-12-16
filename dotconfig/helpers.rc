@@ -1,2 +1,2 @@
-TerminalEmulator=kitty
+TerminalEmulator=st
 TerminalEmulatorDismissed=true
